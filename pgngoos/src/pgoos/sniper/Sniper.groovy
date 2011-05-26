@@ -5,12 +5,16 @@ package pgoos.sniper
  * Date: 5/26/11, Time: 4:00 PM
  * Do not use without permission.
  */
-class Sniper {
+class Sniper implements  EventListener {
     Auction auction
     StateListener listener
 
     def start() {
-        Event welcome = auction.register()
-        listener.connectedNewAuction welcome.id
+        auction.register()
+    }
+
+    @Override
+    void handleEvent(Event e) {
+        listener.connectedNewAuction e
     }
 }

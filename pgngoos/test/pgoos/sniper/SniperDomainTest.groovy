@@ -10,19 +10,39 @@ public class SniperDomainTest extends TestCase {
 
     Auction auction
     StateListener ui
+    Sniper sniper
 
 
     void setUp() {
-        auction = mock(Auction.class)
+        auction = new DefaultAuction()
         ui = mock(StateListener.class)
+        sniper = new Sniper(auction: auction, listener: ui)
+
+        auction.registerEventListener sniper
     }
 
     void test_sniper_should_receive_welcome_event_when_it_joins_an_auction() {
-        Sniper sniper = new Sniper(auction: auction, listener: ui)
-        when(auction.register()).thenReturn(Event.Welcome("someauction"))
+
+        FakeServer server = new FakeServer(auction)
 
         sniper.start()
 
-        verify(ui).connectedNewAuction("someauction")
+        server.sendWelcome("someauction")
+
+        verify(ui).connectedNewAuction(Event.newAuction("someauction"))
     }
+
+//    void test_should_join_an_action_and_loose_without_bidding() {
+//        Auction auction = new DefaultAuction()
+//
+//        Sniper sniper = new Sniper(auction: auction, listener: ui)
+//
+//        sniper.start()
+//        def bid = Event.Bid("someitem", "123", "someclient")
+//        sniper.handleBid(bid)
+//        verify(ui).handleBidUpdate(bid)
+//        sniper.handleBid(bid)
+//        verify(ui).eventClosed()
+//
+//    }
 }

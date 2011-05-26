@@ -7,4 +7,8 @@ package pgoos.sniper
  */
 interface Auction {
     Event register()
+
+    def handleMessage(String message)
+
+    def registerEventListener(EventListener eventListener)
 }
