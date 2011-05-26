@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/custom-hamcrest-matcher/custom-hamcrest-matcher.iml" filepath="$PROJECT_DIR$/custom-hamcrest-matcher/custom-hamcrest-matcher.iml" />
       <module fileurl="file://$PROJECT_DIR$/diagnostics/diagnostics.iml" filepath="$PROJECT_DIR$/diagnostics/diagnostics.iml" />
       <module fileurl="file://$PROJECT_DIR$/flexibility/flexibility.iml" filepath="$PROJECT_DIR$/flexibility/flexibility.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pgngoos/pgngoos.iml" filepath="$PROJECT_DIR$/pgngoos/pgngoos.iml" />
       <module fileurl="file://$PROJECT_DIR$/testing-asynchronous-systems/testing-asynchronous-systems.iml" filepath="$PROJECT_DIR$/testing-asynchronous-systems/testing-asynchronous-systems.iml" />
       <module fileurl="file://$PROJECT_DIR$/testing-multithreaded-code/testing-multithreaded-code.iml" filepath="$PROJECT_DIR$/testing-multithreaded-code/testing-multithreaded-code.iml" />
       <module fileurl="file://$PROJECT_DIR$/testing-persistence/testing-persistence.iml" filepath="$PROJECT_DIR$/testing-persistence/testing-persistence.iml" />
