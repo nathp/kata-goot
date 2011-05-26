@@ -15,7 +15,10 @@ class EventParser {
         if ("Welcome" == type) {
             return Event.newAuction(serverid)
         }
-        return Event.UNKNOWN(tokens)
+        if ("Bid" == type) {
+            return Event.Bid(serverid, tokens[4], tokens[5])
+        }
+        throw new RuntimeException("Unknown message type $message")
     }
 
     def type(String[] tokens) {

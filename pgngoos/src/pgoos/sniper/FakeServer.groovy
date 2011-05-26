@@ -13,6 +13,16 @@ class FakeServer {
     }
 
     def sendWelcome(String auctionid) {
-        auction.handleMessage("BI:1.1:$auctionid:Welcome")
+        def prefix = prefix()
+        auction.handleMessage("$prefix:$auctionid:Welcome")
+    }
+
+    def prefix() {
+        "BI:1.1"
+    }
+
+    def mimicBid(String auctionid, String price, String clientid) {
+        def prefix = prefix()
+        auction.handleMessage("$prefix:$auctionid:Bid:$price:$clientid")
     }
 }

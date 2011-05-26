@@ -8,6 +8,7 @@ package pgoos.sniper
 class Sniper implements  EventListener {
     Auction auction
     StateListener listener
+    String id
 
     def start() {
         auction.register()
@@ -15,6 +16,10 @@ class Sniper implements  EventListener {
 
     @Override
     void handleEvent(Event e) {
-        listener.connectedNewAuction e
+        if (e.isNewConnection())
+            listener.connectedNewAuction e
+        else if (e.isBid())
+            listener.bidUpdate e
+
     }
 }
