@@ -5,21 +5,24 @@ package pgoos.sniper
  * Date: 5/26/11, Time: 4:00 PM
  * Do not use without permission.
  */
-class Sniper implements  EventListener {
+class Sniper implements  Auction {
     Auction auction
     StateListener listener
     String id
 
     def start() {
-        auction.register()
+        // connect to server
     }
 
-    @Override
     void handleEvent(Event e) {
         if (e.isNewConnection())
             listener.connectedNewAuction e
         else if (e.isBid())
             listener.bidUpdate e
 
+    }
+
+    @Override def handleMessage(String message) {
+        handleEvent new EventParser().parse(message)
     }
 }

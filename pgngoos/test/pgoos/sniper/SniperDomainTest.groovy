@@ -1,7 +1,5 @@
 package pgoos.sniper
 
-import org.junit.Test
-import org.junit.Before;
 import static org.mockito.Mockito.*
 import junit.framework.TestCase
 
@@ -14,12 +12,8 @@ public class SniperDomainTest extends TestCase {
 
 
     void setUp() {
-        auction = new DefaultAuction()
         ui = mock(StateListener.class)
-        sniper = new Sniper(auction: auction, listener: ui, id:"thisclient")
-
-
-        auction.registerEventListener sniper
+        auction = sniper = new Sniper(listener: ui, id:"thisclient")
     }
 
     void test_sniper_should_receive_welcome_event_when_it_joins_an_auction() {
