@@ -3,10 +3,9 @@ package pgoos.sniper
 import static org.mockito.Mockito.*
 import junit.framework.TestCase
 
-
 public class SniperDomainTest extends TestCase {
 
-    Auction auction
+    MessageHandler auction
     StateListener ui
     Sniper sniper
 
@@ -24,7 +23,7 @@ public class SniperDomainTest extends TestCase {
 
         server.sendWelcome("someauction")
 
-        verify(ui).connectedNewAuction(Event.newAuction("someauction"))
+        verify(ui).connectedNewAuction(Message.newAuction("someauction"))
     }
 
     void test_should_join_an_action_and_see_bid_updates() {
@@ -32,7 +31,7 @@ public class SniperDomainTest extends TestCase {
         sniper.start()
         server.sendWelcome("someclient")
         server.mimicBid("someitem", "123", "someclient")
-        verify(ui).connectedNewAuction(Event.newAuction("someclient"))
-        verify(ui).bidUpdate(Event.Bid("someitem", "123", "someclient"))
+        verify(ui).connectedNewAuction(Message.newAuction("someclient"))
+        verify(ui).bidUpdate(Message.Bid("someitem", Properties.from("price", "123")))
     }
 }

@@ -6,9 +6,9 @@ package pgoos.sniper
  * Do not use without permission.
  */
 class FakeServer {
-    Auction auction
+    MessageHandler auction
 
-    FakeServer(Auction auction) {
+    FakeServer(MessageHandler auction) {
         this.auction = auction
     }
 

@@ -5,18 +5,18 @@ package pgoos.sniper
  * Date: 5/26/11, Time: 7:51 PM
  * Do not use without permission.
  */
-class EventParser {
-    Event parse(String message) {
+class MessageParser {
+    Message parse(String message) {
         def tokens = message.split(":")
 
         def serverid = serverid(tokens)
         def type = type(tokens)
 
         if ("Welcome" == type) {
-            return Event.newAuction(serverid)
+            return Message.newAuction(serverid)
         }
         if ("Bid" == type) {
-            return Event.Bid(serverid, tokens[4], tokens[5])
+            return Message.Bid(serverid, Properties.from("price", tokens[4]))
         }
         throw new RuntimeException("Unknown message type $message")
     }
