@@ -29,9 +29,9 @@ public class SniperDomainTest extends TestCase {
     void test_should_join_an_action_and_see_bid_updates() {
         FakeServer server = new FakeServer(auction)
         sniper.start()
-        server.sendWelcome("someclient")
+        server.sendWelcome("someitem")
         server.mimicBid("someitem", "123", "someclient")
-        verify(ui).connectedNewAuction(Message.newAuction("someclient"))
+        verify(ui).connectedNewAuction(Message.newAuction("someitem"))
         verify(ui).bidUpdate(Message.Bid("someitem", Properties.from("price", "123")))
     }
 }

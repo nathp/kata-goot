@@ -6,8 +6,9 @@ package pgoos.sniper
  * Do not use without permission.
  */
 class MessageParser {
+
     Message parse(String message) {
-        def tokens = message.split(":")
+        def tokens = tokens(message)
 
         def serverid = serverid(tokens)
         def type = type(tokens)
@@ -21,11 +22,22 @@ class MessageParser {
         throw new RuntimeException("Unknown message type $message")
     }
 
+    private String[] tokens(String message) {
+        return message.split(":")
+    }
+
+
+
+
     def type(String[] tokens) {
         tokens[3]
     }
 
     def serverid(String[] tokens) {
         tokens[2]
+    }
+
+    String parseId(String message) {
+        serverid(tokens(message))
     }
 }
