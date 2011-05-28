@@ -23,15 +23,15 @@ public class SniperDomainTest extends TestCase {
 
         server.sendWelcome("someauction")
 
-        verify(ui).connectedNewAuction(Message.newAuction("someauction"))
+        verify(ui).connectedNewAuction(Message.from("B1:1.1:someauction:Welcome"))
     }
 
     void test_should_join_an_action_and_see_bid_updates() {
         FakeServer server = startFakeServer()
         server.sendWelcome("someitem")
         server.mimicBid("someitem", "123", "someclient")
-        verify(ui).connectedNewAuction(Message.newAuction("someitem"))
-        verify(ui).bidUpdate(Message.Bid("someitem", Properties.from("price", "123")))
+        verify(ui).connectedNewAuction(Message.from("B1:1.1:someitem:Welcome"))
+        verify(ui).bidUpdate(Message.from("B1:1.1:someitem:Bid:123:someclient"))
     }
 
     private FakeServer startFakeServer() {
@@ -45,6 +45,6 @@ public class SniperDomainTest extends TestCase {
         server.sendWelcome("someitem")
         server.mimicBid("someitem", "123", "someclient")
         server.closeAuction("someitem", "124", "someotherclient")
-        verify(ui).auctionLost(Message.AuctionLost("someitem", Properties.from("price", "124").append("clientId", "someotherclient")))
+        verify(ui).auctionLost(Message.from("B1:1.1:someitem:Close:124:someotherclient").asLost())
     }
 }

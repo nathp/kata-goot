@@ -23,6 +23,10 @@ class Message {
         new Message(id: id, type: Type.Close, properties: properties)
     }
 
+    static Message from(String rawMessage) {
+        new MessageParser().parse rawMessage
+    }
+
 
     boolean isNewConnection() {
         type == Type.NewAuction
