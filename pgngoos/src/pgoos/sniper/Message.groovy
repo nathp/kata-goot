@@ -9,17 +9,13 @@ class Message {
 
     String id
     Type type
-    Properties properties
+    Map properties
 
-    static Message Bid(String itemId, Properties properties) {
+    static Message Bid(String itemId, Map properties) {
         new Message(id: itemId, type: Type.Bid, properties: properties)
     }
 
-    static Message AuctionLost(String auctionId, Properties properties) {
-        new Message(id: auctionId, type: Type.Lost, properties: properties)
-    }
-
-    static Message Closed(String id, Properties properties) {
+    static Message Closed(String id, Map properties) {
         new Message(id: id, type: Type.Close, properties: properties)
     }
 
@@ -36,7 +32,7 @@ class Message {
         type == Type.Bid
     }
 
-    def valueOf(def key) { properties.valueOf(key)}
+    def valueOf(def key) { properties.get(key)}
 
     boolean isLose(String auctionId) {
         type == Type.Close && valueOf("clientId") != auctionId
@@ -55,11 +51,11 @@ class Message {
     }
 
     static Message UNKNOWN(String[] tokens) {
-        new Message(id: "unknown", type: Type.UNKNOWN, properties:Properties.NONE)
+        new Message(id: "unknown", type: Type.UNKNOWN, properties:[:])
     }
 
     static Message newAuction(String s) {
-        new Message(id: s, type: Type.NewAuction, properties:Properties.NONE)
+        new Message(id: s, type: Type.NewAuction, properties:[:])
     }
 
     boolean equals(o) {

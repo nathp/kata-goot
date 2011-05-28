@@ -17,10 +17,10 @@ class MessageParser {
             return Message.newAuction(serverid)
         }
         if ("Bid" == type) {
-            return Message.Bid(serverid, Properties.from("price", tokens[4]))
+            return Message.Bid(serverid, ["price": tokens[4]])
         }
         if ("Close" == type) {
-            return Message.Closed(serverid, Properties.from("price", tokens[4]).append("clientId", tokens[5]))
+            return Message.Closed(serverid, ["price":tokens[4], "clientId": tokens[5]])
         }
         throw new RuntimeException("Unknown message type $message")
     }

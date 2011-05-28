@@ -6,6 +6,8 @@ package pgoos.sniper
  * Do not use without permission.
  */
 interface StateListener {
+    StateListener NONE = {} as StateListener
+
     void connectedNewAuction(Message event)
 
     void bidUpdate(Message event)
