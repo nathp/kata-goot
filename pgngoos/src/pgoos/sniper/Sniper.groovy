@@ -16,16 +16,11 @@ class Sniper implements MessageHandler {
         auctions = new Auctions(listener:listener)
     }
 
-    @Override def handleMessage(String message) {
+    @Override void handleMessage(String message) {
 
         String auctionId = new MessageParser().parseId(message)
         Auction a = auctions.autionFor(auctionId)
         a.update(new MessageParser().parse(message))
 
-//        def msg = new MessageParser().parse(message)
-//        if (msg.isNewConnection())
-//            listener.connectedNewAuction msg
-//        else if (msg.isBid())
-//            listener.bidUpdate msg
     }
 }

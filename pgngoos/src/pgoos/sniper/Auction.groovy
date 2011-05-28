@@ -28,7 +28,14 @@ class Auction {
     } as State
 
     State HANDLE_BID = { Message msg ->
-        listener.bidUpdate(msg)
+        println msg
+        println "is lost ${msg.isLose(id)}"
+        if (msg.isLose(id)) {
+            listener.auctionLost msg.asLost()
+        } else {
+            listener.bidUpdate(msg)
+        }
+
     } as State
 
     State current = WAIT_FOR_WELCOME

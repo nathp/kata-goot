@@ -15,6 +15,15 @@ class Message {
         new Message(id: itemId, type: Type.Bid, properties: properties)
     }
 
+    static Message AuctionLost(String auctionId, Properties properties) {
+        new Message(id: auctionId, type: Type.Lost, properties: properties)
+    }
+
+    static Message Closed(String id, Properties properties) {
+        new Message(id: id, type: Type.Close, properties: properties)
+    }
+
+
     boolean isNewConnection() {
         type == Type.NewAuction
     }
@@ -25,9 +34,19 @@ class Message {
 
     def valueOf(def key) { properties.valueOf(key)}
 
+    boolean isLose(String auctionId) {
+        type == Type.Close && valueOf("clientId") != auctionId
+    }
+
+    Message asLost() {
+        new Message(id:id, type:Type.Lost, properties:properties)
+    }
+
     enum Type {
         NewAuction,
         Bid,
+        Lost,
+        Close,
         UNKNOWN
     }
 

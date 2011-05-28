@@ -9,4 +9,6 @@ interface StateListener {
     void connectedNewAuction(Message event)
 
     void bidUpdate(Message event)
+
+    void auctionLost(Message message)
 }

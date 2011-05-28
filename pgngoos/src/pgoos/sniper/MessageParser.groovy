@@ -19,15 +19,15 @@ class MessageParser {
         if ("Bid" == type) {
             return Message.Bid(serverid, Properties.from("price", tokens[4]))
         }
+        if ("Close" == type) {
+            return Message.Closed(serverid, Properties.from("price", tokens[4]).append("clientId", tokens[5]))
+        }
         throw new RuntimeException("Unknown message type $message")
     }
 
     private String[] tokens(String message) {
         return message.split(":")
     }
-
-
-
 
     def type(String[] tokens) {
         tokens[3]

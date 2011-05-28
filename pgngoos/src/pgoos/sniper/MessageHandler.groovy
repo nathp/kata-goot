@@ -6,5 +6,5 @@ package pgoos.sniper
  * Do not use without permission.
  */
 interface MessageHandler {
-    def handleMessage(String message)
+    void handleMessage(String message)
 }

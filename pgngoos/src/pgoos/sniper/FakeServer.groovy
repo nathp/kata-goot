@@ -6,6 +6,7 @@ package pgoos.sniper
  * Do not use without permission.
  */
 class FakeServer {
+
     MessageHandler auction
 
     FakeServer(MessageHandler auction) {
@@ -17,12 +18,20 @@ class FakeServer {
         auction.handleMessage("$prefix:$auctionid:Welcome")
     }
 
-    def prefix() {
+    String prefix() {
         "BI:1.1"
+    }
+
+    def closeAuction(String auctionId, String price, String clientId) {
+        def prefix = prefix();
+        auction.handleMessage("$prefix:$auctionId:Close:$price:$clientId" as String)
+
     }
 
     def mimicBid(String auctionid, String price, String clientid) {
         def prefix = prefix()
         auction.handleMessage("$prefix:$auctionid:Bid:$price:$clientid")
     }
+
+
 }
