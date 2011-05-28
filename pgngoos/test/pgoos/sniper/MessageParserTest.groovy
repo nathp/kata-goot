@@ -10,6 +10,7 @@ public class MessageParserTest extends TestCase {
 
     void test_close_message() {
         Message m = new MessageParser().parse("B1:1.1:someItem:Close:123:someClient")
+        assertEquals "123", m.column(4)
         assertFalse m.isBid()
         assertTrue m.isLose("myClient")
         assertFalse m.isLose("someClient")

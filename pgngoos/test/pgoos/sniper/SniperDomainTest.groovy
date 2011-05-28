@@ -45,6 +45,6 @@ public class SniperDomainTest extends TestCase {
         server.sendWelcome("someitem")
         server.mimicBid("someitem", "123", "someclient")
         server.closeAuction("someitem", "124", "someotherclient")
-        verify(ui).auctionLost(Message.from("B1:1.1:someitem:Close:124:someotherclient").asLost())
+        verify(ui).auctionLost(Message.from("B1:1.1:someitem:Close:124:someotherclient"))
     }
 }

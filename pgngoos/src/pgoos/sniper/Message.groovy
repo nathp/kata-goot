@@ -8,65 +8,39 @@ package pgoos.sniper
 class Message {
 
     String id
-    Type type
-    Map properties
-
-    static Message Bid(String itemId, Map properties) {
-        new Message(id: itemId, type: Type.Bid, properties: properties)
-    }
-
-    static Message Closed(String id, Map properties) {
-        new Message(id: id, type: Type.Close, properties: properties)
-    }
+    String type
+    String props
 
     static Message from(String rawMessage) {
         new MessageParser().parse rawMessage
     }
 
-
-    boolean isNewConnection() {
-        type == Type.NewAuction
+    static Message renameThis(String auctionId, String type, String properties) {
+        if (properties.startsWith(":")) {
+            properties = properties.substring(1)
+        }
+        new Message(id:auctionId, type:type, props:properties)
     }
 
-    boolean isBid() {
-        type == Type.Bid
+    String column(int c) {
+        int correctedCol = c - 4
+
+
+        println props.split(":")
+        props.split(":")[correctedCol]
     }
 
     def valueOf(def key) { properties.get(key)}
-
-    boolean isLose(String auctionId) {
-        type == Type.Close && valueOf("clientId") != auctionId
-    }
-
-    Message asLost() {
-        new Message(id:id, type:Type.Lost, properties:properties)
-    }
-
-    enum Type {
-        NewAuction,
-        Bid,
-        Lost,
-        Close,
-        UNKNOWN
-    }
-
-    static Message UNKNOWN(String[] tokens) {
-        new Message(id: "unknown", type: Type.UNKNOWN, properties:[:])
-    }
-
-    static Message newAuction(String s) {
-        new Message(id: s, type: Type.NewAuction, properties:[:])
-    }
 
     boolean equals(o) {
         if (this.is(o)) return true;
         if (getClass() != o.class) return false;
 
-        Message event = (Message) o;
+        Message message = (Message) o;
 
-        if (id != event.id) return false;
-        if (properties != event.properties) return false;
-        if (type != event.type) return false;
+        if (id != message.id) return false;
+        if (props != message.props) return false;
+        if (type != message.type) return false;
 
         return true;
     }
@@ -75,15 +49,15 @@ class Message {
         int result;
         result = (id != null ? id.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (properties != null ? properties.hashCode() : 0);
+        result = 31 * result + (props != null ? props.hashCode() : 0);
         return result;
     }
 
-
     @Override
     String toString() {
-        return super.toString() + " id:$id, event:$type, map:$properties"
+        return super.toString() + " id:$id, event:$type, map:$props"
     }
+
 
 
 }

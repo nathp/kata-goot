@@ -1,5 +1,7 @@
 package pgoos.sniper
 
+import pgoos.sniper.events.*
+
 /**
  * Copy right of Prasanth Nath.
  * Date: 5/27/11, Time: 9:18 PM
@@ -14,38 +16,30 @@ class Auction {
     }
 
     interface State {
-        void handle(Message msg)
+        void handle(SniperEvent msg)
     }
 
     StateListener listener
 
-    State WAIT_FOR_WELCOME = {Message msg ->
-        if (msg.isNewConnection()) {
-            listener.connectedNewAuction msg
-            switchTo(HANDLE_BID)
-        }
+    State WAIT_FOR_WELCOME = {SniperEvent msg ->
+        msg.handle(listener, delegate)
+        switchTo(HANDLE_BID)
 
     } as State
 
-    State HANDLE_BID = { Message msg ->
+    State HANDLE_BID = { SniperEvent msg ->
         println msg
-        println "is lost ${msg.isLose(id)}"
-        if (msg.isLose(id)) {
-            listener.auctionLost msg.asLost()
-        } else {
-            listener.bidUpdate(msg)
-        }
-
+        msg.handle(listener, delegate)
     } as State
 
-    State current = WAIT_FOR_WELCOME
+    State currentState = WAIT_FOR_WELCOME
 
     private def switchTo(State state) {
-        current = state
+        currentState = state
     }
 
     def update(Message message) {
-        current.handle(message)
+        currentState.handle(Events.createFrom(message))
     }
 
 }

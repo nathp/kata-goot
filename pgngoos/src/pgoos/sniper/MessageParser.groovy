@@ -9,20 +9,15 @@ class MessageParser {
 
     Message parse(String message) {
         def tokens = tokens(message)
-
         def serverid = serverid(tokens)
         def type = type(tokens)
+        def properties = message - prefix() - ":" - serverid - ":" - type
+        Message.renameThis(serverid, type, properties)
 
-        if ("Welcome" == type) {
-            return Message.newAuction(serverid)
-        }
-        if ("Bid" == type) {
-            return Message.Bid(serverid, ["price": tokens[4]])
-        }
-        if ("Close" == type) {
-            return Message.Closed(serverid, ["price":tokens[4], "clientId": tokens[5]])
-        }
-        throw new RuntimeException("Unknown message type $message")
+    }
+
+    String prefix() {
+        "B1:1.1"
     }
 
     private String[] tokens(String message) {

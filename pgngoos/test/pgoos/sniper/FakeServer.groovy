@@ -19,7 +19,7 @@ class FakeServer {
     }
 
     String prefix() {
-        "BI:1.1"
+        "B1:1.1"
     }
 
     def closeAuction(String auctionId, String price, String clientId) {
