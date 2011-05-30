@@ -10,6 +10,7 @@ import pgoos.sniper.events.*
 class Auction {
 
     String id
+    String clientid
 
     public String toString() {
         id
@@ -28,7 +29,6 @@ class Auction {
     } as State
 
     State HANDLE_BID = { SniperEvent msg ->
-        println msg
         msg.handle(listener, delegate)
     } as State
 

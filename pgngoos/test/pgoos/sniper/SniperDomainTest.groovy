@@ -47,4 +47,15 @@ public class SniperDomainTest extends TestCase {
         server.closeAuction("someitem", "124", "someotherclient")
         verify(ui).auctionLost(Message.from("B1:1.1:someitem:Close:124:someotherclient"))
     }
+
+    void test_should_report_when_bid_is_won() {
+        FakeServer server = startFakeServer()
+        sniper.server = mock(AuctionServer.class)
+        server.sendWelcome("someitem")
+        server.mimicBid("someitem", "123", "someclient")
+        sniper.bid("someitem", "124")
+        server.closeAuction "someitem", "124", "thisclient"
+        verify(sniper.server).sendMessage "B1:1.1:someitem:Bid:124:thisclient"
+        verify(ui).won(Message.from("B1:1.1:someitem:Close:124:thisclient"))
+    }
 }

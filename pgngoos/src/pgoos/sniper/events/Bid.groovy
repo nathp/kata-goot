@@ -18,12 +18,10 @@ class Bid extends SniperEvent {
 
     static Bid create(Message message) {
         Bid bid = new Bid(price:message.column(3), client: message.column(4), message:message)
-
         bid
     }
 
     void handle(StateListener stateListener, Auction auction) {
-
         stateListener.bidUpdate message
     }
 

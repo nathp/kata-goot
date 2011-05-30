@@ -13,4 +13,6 @@ interface StateListener {
     void bidUpdate(Message event)
 
     void auctionLost(Message message)
+
+    void won(Message message)
 }

@@ -24,9 +24,6 @@ class Message {
 
     String column(int c) {
         int correctedCol = c - 4
-
-
-        println props.split(":")
         props.split(":")[correctedCol]
     }
 

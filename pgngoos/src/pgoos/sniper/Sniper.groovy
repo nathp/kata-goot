@@ -10,10 +10,11 @@ class Sniper implements MessageHandler {
     StateListener listener
     String id
     Auctions auctions
+    AuctionServer server
 
     def start() {
         // connect to server
-        auctions = new Auctions(listener:listener)
+        auctions = new Auctions(listener:listener, clientId: id)
     }
 
     @Override void handleMessage(String message) {
@@ -22,5 +23,9 @@ class Sniper implements MessageHandler {
         Auction a = auctions.autionFor(auctionId)
         a.update(new MessageParser().parse(message))
 
+    }
+
+    def bid(String auctionId, String price) {
+        server.sendMessage("B1:1.1:$auctionId:Bid:$price:$id")
     }
 }
