@@ -11,20 +11,25 @@ class Message {
     String type
     String props
 
-    static Message from(String rawMessage) {
+    static Message parseFrom(String rawMessage) {
         new MessageParser().parse rawMessage
     }
 
-    static Message renameThis(String auctionId, String type, String properties) {
+    static Message createFrom(String auctionId, String type, String properties) {
         if (properties.startsWith(":")) {
             properties = properties.substring(1)
         }
         new Message(id:auctionId, type:type, props:properties)
     }
 
+    static String rawBidMessage(String auctionId, String price, String clientId) {
+         "B1:1.1:$auctionId:Bid:$price:$clientId"
+    }
+
     String column(int c) {
         int correctedCol = c - 4
-        props.split(":")[correctedCol]
+        def items = props.split(":").collect { it.trim() }
+        correctedCol < items.size() ? items[correctedCol] : null
     }
 
     def valueOf(def key) { properties.get(key)}
@@ -52,7 +57,7 @@ class Message {
 
     @Override
     String toString() {
-        return super.toString() + " id:$id, event:$type, map:$props"
+        return super.toString() + " auctionId:$id, event:$type, properties[$props]"
     }
 
 

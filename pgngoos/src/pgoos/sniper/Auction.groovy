@@ -9,11 +9,11 @@ import pgoos.sniper.events.*
  */
 class Auction {
 
-    String id
-    String clientid
+    String auctionId
+    String clientId
 
     public String toString() {
-        id
+        auctionId
     }
 
     interface State {

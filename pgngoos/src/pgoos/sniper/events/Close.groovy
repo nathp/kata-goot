@@ -20,7 +20,7 @@ class Close extends SniperEvent {
 
     @Override
     void handle(AuctionStateListener stateListener, Auction auction) {
-        if (auction.clientid != property("clientId")) {
+        if (auction.clientId != property("clientId")) {
             stateListener.auctionLost message
         } else {
             stateListener.won message

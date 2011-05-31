@@ -7,25 +7,21 @@ package pgoos.sniper
  */
 class Sniper implements AuctionMessageHandler {
 
-    AuctionStateListener listener
-    String id
+    String clientId
     Auctions auctions
-    AuctionConnection server
+    AuctionConnection auctionConnection
 
     def start() {
-        // connect to server
-        auctions = new Auctions(listener:listener, clientId: id)
+        // connect via auctionConnection
     }
 
     @Override void handleMessage(String message) {
-
-        String auctionId = new MessageParser().parseId(message)
-        Auction a = auctions.findAuctionWithId(auctionId)
-        a.update(new MessageParser().parse(message))
-
+        def msg = Message.parseFrom(message)
+        Auction a = auctions.findAuctionWithId(msg.id)
+        a.update(msg)
     }
 
     def bid(String auctionId, String price) {
-        server.sendMessage("B1:1.1:$auctionId:Bid:$price:$id")
+        auctionConnection.sendMessage Message.rawBidMessage(auctionId, price, clientId)
     }
 }

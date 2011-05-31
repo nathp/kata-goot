@@ -13,7 +13,7 @@ class Auctions {
     Auction findAuctionWithId(String id) {
         Auction a = map.get(id) as Auction
         if (!a) {
-            a = new Auction(id:id, listener: listener, clientid:clientId)
+            a = new Auction(auctionId:id, listener: listener, clientId:clientId)
             map.put(id, a)
         }
         a

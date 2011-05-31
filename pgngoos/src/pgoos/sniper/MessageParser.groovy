@@ -12,7 +12,7 @@ class MessageParser {
         def serverid = serverid(tokens)
         def type = type(tokens)
         def properties = message - prefix() - ":" - serverid - ":" - type
-        Message.renameThis(serverid, type, properties)
+        Message.createFrom(serverid, type, properties)
 
     }
 
