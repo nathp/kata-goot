@@ -26,27 +26,29 @@ class Auction {
     }
 
     interface State {
-        void handle(SniperEvent msg)
+        void handle(AuctionEvent msg)
     }
 
     AuctionStateListener listener
 
-    State WAIT_FOR_WELCOME = {SniperEvent msg ->
+    State WAIT_FOR_WELCOME = {AuctionEvent msg ->
         msg.handle(listener, delegate)
         switchTo(HANDLE_BID)
 
     } as State
 
-    State HANDLE_BID = { SniperEvent msg ->
+    State HANDLE_BID = { AuctionEvent msg ->
         if (isOurUpdate(msg)) {
             ourLastBidPrice = msg.price
         }
         msg.handle(listener, delegate)
     } as State
 
-    boolean isOurUpdate(Bid event) {
-        println "${event.client}, $clientId"
-        event.client == clientId
+    State CLOSED = { AuctionEvent e ->
+    } as State
+
+    boolean isOurUpdate(AuctionEvent event) {
+        event instanceof Bid && event.client == clientId
     }
 
     State currentState = WAIT_FOR_WELCOME
@@ -59,4 +61,7 @@ class Auction {
         currentState.handle(Events.createFrom(message))
     }
 
+    void close() {
+        switchTo CLOSED
+    }
 }

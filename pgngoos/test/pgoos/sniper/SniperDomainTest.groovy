@@ -3,6 +3,7 @@ package pgoos.sniper
 import static org.mockito.Mockito.*
 import junit.framework.TestCase
 import pgoos.sniper.events.Bid
+import pgoos.sniper.events.NewAuction
 
 public class SniperDomainTest extends TestCase {
 
@@ -20,14 +21,14 @@ public class SniperDomainTest extends TestCase {
 
     void test_sniper_should_receive_welcome_event_when_it_joins_an_auction() {
         server.sendWelcome("someauction")
-        verify(ui).connectedNewAuction(Message.parseFrom("B1:1.1:someauction:Welcome"))
+        verify(ui).connectedNewAuction(new NewAuction(auctionId:"someauction"))
     }
 
     void test_should_join_an_action_and_see_bid_updates() {
         server.sendWelcome("someitem")
         server.mimicBid("someitem", "123", "someclient")
-        verify(ui).connectedNewAuction(Message.parseFrom("B1:1.1:someitem:Welcome"))
-        verify(ui).bidUpdate(Message.parseFrom("B1:1.1:someitem:Bid:123:someclient"))
+        verify(ui).connectedNewAuction(new NewAuction(auctionId:"someitem"))
+        verify(ui).bidUpdate(new Bid(auctionId: "someitem", price:"123", client: "someclient"))
     }
 
     private FakeServer startFakeServer() {

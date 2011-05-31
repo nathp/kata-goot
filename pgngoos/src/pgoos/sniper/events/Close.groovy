@@ -9,7 +9,7 @@ import pgoos.sniper.Message
  * Date: 5/28/11, Time: 6:16 PM
  * Do not use without permission.
  */
-class Close extends SniperEvent {
+class Close extends AuctionEvent {
     Message message
 
     static Close create(Message message) {
@@ -25,6 +25,7 @@ class Close extends SniperEvent {
         } else {
             stateListener.won message
         }
+        auction.close()
     }
 
     def property(String key) {

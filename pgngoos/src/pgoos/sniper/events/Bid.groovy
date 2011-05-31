@@ -9,7 +9,7 @@ import pgoos.sniper.Auction
  * Date: 5/28/11, Time: 5:09 PM
  * Do not use without permission.
  */
-class Bid extends SniperEvent {
+class Bid extends AuctionEvent {
 
     String price
     String client
@@ -25,8 +25,9 @@ class Bid extends SniperEvent {
         if (auction.isLoosing(price)) {
             updateState(State.Losing)
             stateListener.loosing this
-        } else
-            stateListener.bidUpdate message
+        } else {
+            stateListener.bidUpdate this
+        }
     }
 
     def updateState(State state) {

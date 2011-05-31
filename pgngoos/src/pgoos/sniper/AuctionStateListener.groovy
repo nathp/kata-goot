@@ -1,6 +1,7 @@
 package pgoos.sniper
 
 import pgoos.sniper.events.Bid
+import pgoos.sniper.events.NewAuction
 
 /**
  * Copy right of Prasanth Nath.
@@ -10,9 +11,9 @@ import pgoos.sniper.events.Bid
 interface AuctionStateListener {
     AuctionStateListener NONE = {} as AuctionStateListener
 
-    void connectedNewAuction(Message event)
+    void connectedNewAuction(NewAuction event)
 
-    void bidUpdate(Message event)
+    void bidUpdate(Bid bid)
 
     void auctionLost(Message message)
 
