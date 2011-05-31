@@ -14,10 +14,9 @@ class Bid extends AuctionEvent {
     String price
     String client
     State state = State.NotKnown
-    Message message
 
     static Bid create(Message message) {
-        Bid bid = new Bid(auctionId: message.id, price:message.column(4), client: message.column(5), message:message)
+        Bid bid = new Bid(auctionId: message.id, price:message.column(4), client: message.column(5))
         bid
     }
 
@@ -51,6 +50,7 @@ class Bid extends AuctionEvent {
 
         if (client != bid.client) return false;
         if (price != bid.price) return false;
+        if (auctionId != bid.auctionId) return false;
         if (state != bid.state) return false;
 
         return true;
@@ -60,6 +60,7 @@ class Bid extends AuctionEvent {
         int result;
         result = (price != null ? price.hashCode() : 0);
         result = 31 * result + (client != null ? client.hashCode() : 0);
+        result = 31 * result + (auctionId!= null ? auctionId.hashCode() : 0);
         result = 31 * result + (state != null ? state.hashCode() : 0);
         return result;
     }
