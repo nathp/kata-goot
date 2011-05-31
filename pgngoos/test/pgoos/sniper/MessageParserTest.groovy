@@ -2,6 +2,7 @@ package pgoos.sniper;
 import org.junit.*
 import static org.mockito.Mockito.*
 import junit.framework.TestCase
+import pgoos.sniper.events.Bid
 
 public class MessageParserTest extends TestCase {
     void test_parses_msg_id() {
@@ -16,4 +17,10 @@ public class MessageParserTest extends TestCase {
 
     }
 
+    void test_parsing_Bid() {
+        Bid b = Bid.create(Message.parseFrom("B1:1.1:someitem:Bid:10:someclient"))
+        assertEquals "someitem", b.auctionId
+        assertEquals "10", b.price
+        assertEquals "someclient", b.client
+    }
 }

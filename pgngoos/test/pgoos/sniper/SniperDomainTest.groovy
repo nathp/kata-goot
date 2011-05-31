@@ -2,6 +2,7 @@ package pgoos.sniper
 
 import static org.mockito.Mockito.*
 import junit.framework.TestCase
+import pgoos.sniper.events.Bid
 
 public class SniperDomainTest extends TestCase {
 
@@ -48,5 +49,23 @@ public class SniperDomainTest extends TestCase {
         server.closeAuction "someitem", "124", "thisclient"
         verify(sniper.auctionConnection).sendMessage "B1:1.1:someitem:Bid:124:thisclient"
         verify(ui).won(Message.parseFrom("B1:1.1:someitem:Close:124:thisclient"))
+    }
+
+    void test_should_update_bids_as_loosing_ones_when_other_bid_higher() {
+        sniper.auctionConnection = mock(AuctionConnection.class)
+        server.sendWelcome("someitem")
+        bidFor("someitem", "10")
+
+        server.mimicBid("someitem", "11", "someclient")
+        verify(ui).loosing(new Bid(auctionId: "someitem", price: "11", client: "someclient", state: Bid.State.Losing))
+    }
+
+    private def bidFor(String someitem, String price) {
+        sniper.bid(someitem, price)
+        server.mimicBid(someitem, price, myclientId())
+    }
+
+    String myclientId() {
+        "thisclient"
     }
 }

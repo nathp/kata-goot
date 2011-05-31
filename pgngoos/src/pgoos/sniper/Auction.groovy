@@ -12,8 +12,17 @@ class Auction {
     String auctionId
     String clientId
 
+    String ourLastBidPrice
+
     public String toString() {
         auctionId
+    }
+
+    boolean isLoosing(String price) {
+        if (!ourLastBidPrice) {
+            return false
+        }
+        (ourLastBidPrice as int) < (price as int)
     }
 
     interface State {
@@ -29,8 +38,16 @@ class Auction {
     } as State
 
     State HANDLE_BID = { SniperEvent msg ->
+        if (isOurUpdate(msg)) {
+            ourLastBidPrice = msg.price
+        }
         msg.handle(listener, delegate)
     } as State
+
+    boolean isOurUpdate(Bid event) {
+        println "${event.client}, $clientId"
+        event.client == clientId
+    }
 
     State currentState = WAIT_FOR_WELCOME
 
