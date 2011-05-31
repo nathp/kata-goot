@@ -13,27 +13,58 @@ class Bid extends AuctionEvent {
 
     String price
     String client
-    State state = State.NotKnown
+    final State state
 
     static Bid create(Message message) {
-        Bid bid = new Bid(auctionId: message.id, price:message.column(4), client: message.column(5))
-        bid
+        new Bid(message.id, message.column(4), message.column(5), State.NotKnown)
     }
 
-    void handle(AuctionStateListener stateListener, Auction auction) {
-        if (auction.isLoosing(price)) {
-            updateState(State.Losing)
-            stateListener.loosing this
-        } else {
-            stateListener.bidUpdate this
-        }
-    }
-
-    def updateState(State state) {
+    Bid(String auctionId, String price, String client, State state) {
+        this.auctionId = auctionId
+        this.price = price
+        this.client = client
         this.state = state
     }
 
-    enum State {
+    static Bid newBid(String id, String price, String client) {
+        new Bid(id, price, client, State.NotKnown)
+    }
+
+    void handle(AuctionStateListener stateListener, Auction auction) {
+        if (auction.firstBidUpdate()) {
+            stateListener.bidUpdate this
+        } else if (auction.isLoosing(this)) {
+            stateListener.loosing this.loosing()
+        } else {
+            stateListener.bidUpdate this.winning()
+        }
+    }
+
+    Bid winning() {
+        new Bid(auctionId, price, client, State.Winning)
+    }
+
+    Bid loosing() {
+        new Bid(auctionId, price, client, State.Losing)
+    }
+
+    boolean isMoreThan(int price) {
+        (this.price as int) > price
+    }
+
+    boolean isOurs(String ourClientId) {
+        client == ourClientId
+    }
+
+    public String toString() {
+        return "Bid{" +
+                "price='" + price + '\'' +
+                ", client='" + client + '\'' +
+                ", state=" + state +
+                '}';
+    }
+
+    static enum State {
         Winning,
         Losing,
         Lost,
@@ -60,7 +91,7 @@ class Bid extends AuctionEvent {
         int result;
         result = (price != null ? price.hashCode() : 0);
         result = 31 * result + (client != null ? client.hashCode() : 0);
-        result = 31 * result + (auctionId!= null ? auctionId.hashCode() : 0);
+        result = 31 * result + (auctionId != null ? auctionId.hashCode() : 0);
         result = 31 * result + (state != null ? state.hashCode() : 0);
         return result;
     }

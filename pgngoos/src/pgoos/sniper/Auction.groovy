@@ -12,17 +12,18 @@ class Auction {
     String auctionId
     String clientId
 
-    String ourLastBidPrice
+    String ourLastBidPrice  = null
 
     public String toString() {
         auctionId
     }
 
-    boolean isLoosing(String price) {
-        if (!ourLastBidPrice) {
-            return false
-        }
-        (ourLastBidPrice as int) < (price as int)
+    boolean isLoosing(Bid bid) {
+        !bid.isOurs(auctionId) && !firstBidUpdate() && bid.isMoreThan(ourLastBidPrice as int)
+    }
+
+    boolean firstBidUpdate() {
+        ourLastBidPrice == null
     }
 
     interface State {
@@ -38,10 +39,10 @@ class Auction {
     } as State
 
     State HANDLE_BID = { AuctionEvent msg ->
+        msg.handle(listener, delegate)
         if (isOurUpdate(msg)) {
             ourLastBidPrice = msg.price
         }
-        msg.handle(listener, delegate)
     } as State
 
     State CLOSED = { AuctionEvent e ->

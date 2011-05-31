@@ -11,25 +11,25 @@ public class SniperDomainTest extends TestCase {
     AuctionStateListener ui
     Sniper sniper
 
-    FakeServer server
+    FakeServer fakeServer
 
     void setUp() {
         ui = mock(AuctionStateListener.class)
         sniper = new Sniper(clientId: "thisclient", auctions: new Auctions(listener: ui, clientId: "thisclient"))
-        server = new FakeServer(sniper)
+        fakeServer = new FakeServer(sniper)
         sniper.start()
     }
 
     void test_sniper_should_receive_welcome_event_when_it_joins_an_auction() {
-        server.sendWelcome("someauction")
+        fakeServer.sendWelcome("someauction")
         verify(ui).connectedNewAuction(new NewAuction(auctionId:"someauction"))
     }
 
     void test_should_join_an_action_and_see_bid_updates() {
-        server.sendWelcome("someitem")
-        server.mimicBid("someitem", "123", "someclient")
+        fakeServer.sendWelcome("someitem")
+        fakeServer.mimicBid("someitem", "123", "someclient")
         verify(ui).connectedNewAuction(new NewAuction(auctionId:"someitem"))
-        verify(ui).bidUpdate(new Bid(auctionId: "someitem", price:"123", client: "someclient"))
+        verify(ui).bidUpdate(Bid.newBid("someitem", "123", "someclient"))
     }
 
     private FakeServer startFakeServer() {
@@ -37,34 +37,34 @@ public class SniperDomainTest extends TestCase {
     }
 
     void test_should_join_an_auction_and_loose_when_auction_closes() {
-        server.sendWelcome("someitem")
-        server.mimicBid("someitem", "123", "someclient")
-        server.closeAuction("someitem", "124", "someotherclient")
+        fakeServer.sendWelcome("someitem")
+        fakeServer.mimicBid("someitem", "123", "someclient")
+        fakeServer.closeAuction("someitem", "124", "someotherclient")
         verify(ui).auctionLost(new Close(auctionId :"someitem", price:"124", client:"someotherclient"))
     }
 
     void test_should_report_when_bid_is_won() {
         sniper.auctionConnection = mock(AuctionConnection.class)
-        server.sendWelcome("someitem")
-        server.mimicBid("someitem", "123", "someclient")
+        fakeServer.sendWelcome("someitem")
+        fakeServer.mimicBid("someitem", "123", "someclient")
         sniper.bid("someitem", "124")
-        server.closeAuction "someitem", "124", "thisclient"
+        fakeServer.closeAuction "someitem", "124", "thisclient"
         verify(sniper.auctionConnection).sendMessage "B1:1.1:someitem:Bid:124:thisclient"
         verify(ui).won(new Close(auctionId:"someitem", price:"124", client:"thisclient"))
     }
 
     void test_should_update_bids_as_loosing_ones_when_other_bid_higher() {
         sniper.auctionConnection = mock(AuctionConnection.class)
-        server.sendWelcome("someitem")
+        fakeServer.sendWelcome("someitem")
         bidFor("someitem", "10")
 
-        server.mimicBid("someitem", "11", "someclient")
-        verify(ui).loosing(new Bid(auctionId: "someitem", price: "11", client: "someclient", state: Bid.State.Losing))
+        fakeServer.mimicBid("someitem", "11", "someclient")
+        verify(ui).loosing(Bid.newBid("someitem", "11", "someclient").loosing())
     }
 
     private def bidFor(String someitem, String price) {
         sniper.bid(someitem, price)
-        server.mimicBid(someitem, price, myclientId())
+        fakeServer.mimicBid(someitem, price, myclientId())
     }
 
     String myclientId() {
