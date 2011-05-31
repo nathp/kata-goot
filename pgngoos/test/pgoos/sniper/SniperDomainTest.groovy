@@ -4,6 +4,7 @@ import static org.mockito.Mockito.*
 import junit.framework.TestCase
 import pgoos.sniper.events.Bid
 import pgoos.sniper.events.NewAuction
+import pgoos.sniper.events.Close
 
 public class SniperDomainTest extends TestCase {
 
@@ -39,7 +40,7 @@ public class SniperDomainTest extends TestCase {
         server.sendWelcome("someitem")
         server.mimicBid("someitem", "123", "someclient")
         server.closeAuction("someitem", "124", "someotherclient")
-        verify(ui).auctionLost(Message.parseFrom("B1:1.1:someitem:Close:124:someotherclient"))
+        verify(ui).auctionLost(new Close(auctionId :"someitem", price:"124", client:"someotherclient"))
     }
 
     void test_should_report_when_bid_is_won() {
@@ -49,7 +50,7 @@ public class SniperDomainTest extends TestCase {
         sniper.bid("someitem", "124")
         server.closeAuction "someitem", "124", "thisclient"
         verify(sniper.auctionConnection).sendMessage "B1:1.1:someitem:Bid:124:thisclient"
-        verify(ui).won(Message.parseFrom("B1:1.1:someitem:Close:124:thisclient"))
+        verify(ui).won(new Close(auctionId:"someitem", price:"124", client:"thisclient"))
     }
 
     void test_should_update_bids_as_loosing_ones_when_other_bid_higher() {

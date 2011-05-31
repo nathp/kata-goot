@@ -2,6 +2,7 @@ package pgoos.sniper
 
 import pgoos.sniper.events.Bid
 import pgoos.sniper.events.NewAuction
+import pgoos.sniper.events.Close
 
 /**
  * Copy right of Prasanth Nath.
@@ -15,9 +16,9 @@ interface AuctionStateListener {
 
     void bidUpdate(Bid bid)
 
-    void auctionLost(Message message)
+    void auctionLost(Close close)
 
-    void won(Message message)
+    void won(Close close)
 
     void loosing(Bid bid)
 }

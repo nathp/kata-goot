@@ -10,25 +10,45 @@ import pgoos.sniper.Message
  * Do not use without permission.
  */
 class Close extends AuctionEvent {
-    Message message
+
+    String price
+    String client
 
     static Close create(Message message) {
-        new Close(auctionId: message.id, message:message)
+        new Close(auctionId: message.id, price:message.column(COLUMNS.price), client: message.column(COLUMNS.clientId))
     }
 
     static Map COLUMNS = ["price" : 4, "clientId" :  5]
 
     @Override
     void handle(AuctionStateListener stateListener, Auction auction) {
-        if (auction.clientId != property("clientId")) {
-            stateListener.auctionLost message
+        if (auction.clientId != client) {
+            stateListener.auctionLost this
         } else {
-            stateListener.won message
+            stateListener.won this
         }
         auction.close()
     }
 
-    def property(String key) {
-        message.column(COLUMNS.get(key) as int)
+
+    boolean equals(o) {
+        if (this.is(o)) return true;
+        if (getClass() != o.class) return false;
+
+        Close close = (Close) o;
+
+        if (client != close.client) return false;
+        if (auctionId != close.auctionId) return false;
+        if (price != close.price) return false;
+
+        return true;
+    }
+
+    int hashCode() {
+        int result;
+        result = (price != null ? price.hashCode() : 0);
+        result = 31 * result + (client != null ? client.hashCode() : 0);
+        result = 31 * result + (auctionId != null ? auctionId.hashCode() : 0);
+        return result;
     }
 }
