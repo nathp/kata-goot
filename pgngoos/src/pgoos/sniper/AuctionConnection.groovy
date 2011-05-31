@@ -5,6 +5,6 @@ package pgoos.sniper
  * Date: 5/30/11, Time: 8:27 PM
  * Do not use without permission.
  */
-interface AuctionServer {
+interface AuctionConnection {
     void sendMessage(String message)
 }

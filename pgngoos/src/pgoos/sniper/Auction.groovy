@@ -20,7 +20,7 @@ class Auction {
         void handle(SniperEvent msg)
     }
 
-    StateListener listener
+    AuctionStateListener listener
 
     State WAIT_FOR_WELCOME = {SniperEvent msg ->
         msg.handle(listener, delegate)

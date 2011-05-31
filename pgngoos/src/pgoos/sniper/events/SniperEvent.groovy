@@ -1,7 +1,6 @@
 package pgoos.sniper.events
 
-import pgoos.sniper.Message
-import pgoos.sniper.StateListener
+import pgoos.sniper.AuctionStateListener
 import pgoos.sniper.Auction
 
 /**
@@ -11,5 +10,5 @@ import pgoos.sniper.Auction
  */
 public abstract class SniperEvent {
     String auctionId
-    abstract void handle(StateListener stateListener, Auction auction)
+    abstract void handle(AuctionStateListener stateListener, Auction auction)
 }

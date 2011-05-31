@@ -5,12 +5,12 @@ package pgoos.sniper
  * Date: 5/26/11, Time: 4:00 PM
  * Do not use without permission.
  */
-class Sniper implements MessageHandler {
+class Sniper implements AuctionMessageHandler {
 
-    StateListener listener
+    AuctionStateListener listener
     String id
     Auctions auctions
-    AuctionServer server
+    AuctionConnection server
 
     def start() {
         // connect to server
@@ -20,7 +20,7 @@ class Sniper implements MessageHandler {
     @Override void handleMessage(String message) {
 
         String auctionId = new MessageParser().parseId(message)
-        Auction a = auctions.autionFor(auctionId)
+        Auction a = auctions.findAuctionWithId(auctionId)
         a.update(new MessageParser().parse(message))
 
     }

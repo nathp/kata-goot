@@ -5,13 +5,13 @@ import junit.framework.TestCase
 
 public class SniperDomainTest extends TestCase {
 
-    MessageHandler auction
-    StateListener ui
+    AuctionMessageHandler auction
+    AuctionStateListener ui
     Sniper sniper
 
 
     void setUp() {
-        ui = mock(StateListener.class)
+        ui = mock(AuctionStateListener.class)
         auction = sniper = new Sniper(listener: ui, id: "thisclient")
     }
 
@@ -50,7 +50,7 @@ public class SniperDomainTest extends TestCase {
 
     void test_should_report_when_bid_is_won() {
         FakeServer server = startFakeServer()
-        sniper.server = mock(AuctionServer.class)
+        sniper.server = mock(AuctionConnection.class)
         server.sendWelcome("someitem")
         server.mimicBid("someitem", "123", "someclient")
         sniper.bid("someitem", "124")

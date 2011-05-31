@@ -1,6 +1,6 @@
 package pgoos.sniper.events
 
-import pgoos.sniper.StateListener
+import pgoos.sniper.AuctionStateListener
 import pgoos.sniper.Auction
 import pgoos.sniper.Message
 
@@ -19,7 +19,7 @@ class Close extends SniperEvent {
     static Map COLUMNS = ["price" : 4, "clientId" :  5]
 
     @Override
-    void handle(StateListener stateListener, Auction auction) {
+    void handle(AuctionStateListener stateListener, Auction auction) {
         if (auction.clientid != property("clientId")) {
             stateListener.auctionLost message
         } else {

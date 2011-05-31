@@ -1,7 +1,7 @@
 package pgoos.sniper.events
 
 import pgoos.sniper.Message
-import pgoos.sniper.StateListener
+import pgoos.sniper.AuctionStateListener
 import pgoos.sniper.Auction
 
 /**
@@ -18,7 +18,7 @@ class NewAuction extends SniperEvent {
     }
 
     @Override
-    void handle(StateListener stateListener, Auction auction) {
+    void handle(AuctionStateListener stateListener, Auction auction) {
         stateListener.connectedNewAuction message
     }
 }
