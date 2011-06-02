@@ -1,6 +1,6 @@
 package pgoos.sniper.events
 
-import pgoos.sniper.Message
+import pgoos.sniper.AuctionMessage
 
 /**
  * Copy right of Prasanth Nath.
@@ -8,7 +8,7 @@ import pgoos.sniper.Message
  * Do not use without permission.
  */
 class Events {
-    static AuctionEvent createFrom(Message message) {
+    static AuctionEvent createFrom(AuctionMessage message) {
         switch (message.type) {
             case "Welcome": return NewAuction.create(message);
             case "Bid": return Bid.create(message);

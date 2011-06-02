@@ -1,6 +1,6 @@
 package pgoos.sniper.events
 
-import pgoos.sniper.Message
+import pgoos.sniper.AuctionMessage
 import pgoos.sniper.AuctionStateListener
 import pgoos.sniper.Auction
 
@@ -11,11 +11,11 @@ import pgoos.sniper.Auction
  */
 class Bid extends AuctionEvent {
 
-    String price
-    String client
+    final String price
+    final String client
     final State state
 
-    static Bid create(Message message) {
+    static Bid create(AuctionMessage message) {
         new Bid(message.id, message.column(4), message.column(5), State.NotKnown)
     }
 

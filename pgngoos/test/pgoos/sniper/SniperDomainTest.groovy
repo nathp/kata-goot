@@ -40,21 +40,30 @@ public class SniperDomainTest extends TestCase {
         fakeServer.sendWelcome("someitem")
         fakeServer.mimicBid("someitem", "123", "someclient")
         fakeServer.closeAuction("someitem", "124", "someotherclient")
+        verify(ui).connectedNewAuction(new NewAuction(auctionId:"someitem"))
+        verify(ui).bidUpdate(Bid.newBid("someitem", "123", "someclient"))
         verify(ui).auctionLost(new Close(auctionId :"someitem", price:"124", client:"someotherclient"))
+        verifyNoMoreInteractions ui
+    }
+
+    void test_should_call_auction_server_when_bidding() {
+        sniper.auctionConnection = mock(AuctionConnection.class)
+        fakeServer.sendWelcome("someitem")
+        sniper.bid("someitem", "124")
+        verify(ui).connectedNewAuction(new NewAuction(auctionId:"someitem"))
+        verify(sniper.auctionConnection).sendMessage "B1:1.1:someitem:Bid:124:thisclient"
+        verifyNoMoreInteractions ui
     }
 
     void test_should_report_when_bid_is_won() {
-        sniper.auctionConnection = mock(AuctionConnection.class)
         fakeServer.sendWelcome("someitem")
         fakeServer.mimicBid("someitem", "123", "someclient")
         sniper.bid("someitem", "124")
         fakeServer.closeAuction "someitem", "124", "thisclient"
-        verify(sniper.auctionConnection).sendMessage "B1:1.1:someitem:Bid:124:thisclient"
         verify(ui).won(new Close(auctionId:"someitem", price:"124", client:"thisclient"))
     }
 
-    void test_should_update_bids_as_loosing_ones_when_other_bid_higher() {
-        sniper.auctionConnection = mock(AuctionConnection.class)
+    void test_should_update_bids_as_loosing_ones_when_somebody_else_bids_higher() {
         fakeServer.sendWelcome("someitem")
         bidFor("someitem", "10")
 

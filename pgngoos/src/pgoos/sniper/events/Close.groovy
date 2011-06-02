@@ -2,7 +2,7 @@ package pgoos.sniper.events
 
 import pgoos.sniper.AuctionStateListener
 import pgoos.sniper.Auction
-import pgoos.sniper.Message
+import pgoos.sniper.AuctionMessage
 
 /**
  * Copy right of Prasanth Nath.
@@ -14,7 +14,7 @@ class Close extends AuctionEvent {
     String price
     String client
 
-    static Close create(Message message) {
+    static Close create(AuctionMessage message) {
         new Close(auctionId: message.id, price:message.column(COLUMNS.price), client: message.column(COLUMNS.clientId))
     }
 

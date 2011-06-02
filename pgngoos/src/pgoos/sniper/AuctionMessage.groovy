@@ -5,21 +5,24 @@ package pgoos.sniper
  * Date: 5/26/11, Time: 4:15 PM
  * Do not use without permission.
  */
-class Message {
+/**
+ * Low level message. A thin wrapper around text coming over the wire
+ */
+class AuctionMessage {
 
     String id
     String type
     String props
 
-    static Message parseFrom(String rawMessage) {
+    static AuctionMessage parseFrom(String rawMessage) {
         new MessageParser().parse rawMessage
     }
 
-    static Message createFrom(String auctionId, String type, String properties) {
+    static AuctionMessage createFrom(String auctionId, String type, String properties) {
         if (properties.startsWith(":")) {
             properties = properties.substring(1)
         }
-        new Message(id:auctionId, type:type, props:properties)
+        new AuctionMessage(id:auctionId, type:type, props:properties)
     }
 
     static String rawBidMessage(String auctionId, String price, String clientId) {
@@ -38,7 +41,7 @@ class Message {
         if (this.is(o)) return true;
         if (getClass() != o.class) return false;
 
-        Message message = (Message) o;
+        AuctionMessage message = (AuctionMessage) o;
 
         if (id != message.id) return false;
         if (props != message.props) return false;

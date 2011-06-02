@@ -6,5 +6,7 @@ package pgoos.sniper
  * Do not use without permission.
  */
 interface AuctionConnection {
+    static AuctionConnection NONE = {} as AuctionConnection
+
     void sendMessage(String message)
 }

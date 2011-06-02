@@ -9,19 +9,19 @@ class Sniper implements AuctionMessageHandler {
 
     String clientId
     Auctions auctions
-    AuctionConnection auctionConnection
+    AuctionConnection auctionConnection = AuctionConnection.NONE
 
     def start() {
         // connect via auctionConnection
     }
 
     @Override void handleMessage(String message) {
-        def msg = Message.parseFrom(message)
+        def msg = AuctionMessage.parseFrom(message)
         Auction a = auctions.findAuctionWithId(msg.id)
         a.update(msg)
     }
 
     def bid(String auctionId, String price) {
-        auctionConnection.sendMessage Message.rawBidMessage(auctionId, price, clientId)
+        auctionConnection.sendMessage AuctionMessage.rawBidMessage(auctionId, price, clientId)
     }
 }

@@ -1,6 +1,6 @@
 package pgoos.sniper.events
 
-import pgoos.sniper.Message
+import pgoos.sniper.AuctionMessage
 import pgoos.sniper.AuctionStateListener
 import pgoos.sniper.Auction
 
@@ -11,7 +11,7 @@ import pgoos.sniper.Auction
  */
 class NewAuction extends AuctionEvent {
 
-    static NewAuction create(Message message) {
+    static NewAuction create(AuctionMessage message) {
         new NewAuction(auctionId: message.id)
 
     }

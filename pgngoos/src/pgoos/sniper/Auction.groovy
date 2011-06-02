@@ -6,11 +6,16 @@ import pgoos.sniper.events.*
  * Copy right of Prasanth Nath.
  * Date: 5/27/11, Time: 9:18 PM
  * Do not use without permission.
+ *
+ * Represents the stateful representation of an Auction for some item.
+ *
  */
 class Auction {
 
     String auctionId
     String clientId
+
+    AuctionStateListener listener
 
     String ourLastBidPrice  = null
 
@@ -26,11 +31,9 @@ class Auction {
         ourLastBidPrice == null
     }
 
-    interface State {
+    private interface State {
         void handle(AuctionEvent msg)
     }
-
-    AuctionStateListener listener
 
     State WAIT_FOR_WELCOME = {AuctionEvent msg ->
         msg.handle(listener, delegate)
@@ -40,7 +43,7 @@ class Auction {
 
     State HANDLE_BID = { AuctionEvent msg ->
         msg.handle(listener, delegate)
-        if (isOurUpdate(msg)) {
+        if (isResponseUpdateForOurOwnBid(msg)) {
             ourLastBidPrice = msg.price
         }
     } as State
@@ -48,7 +51,7 @@ class Auction {
     State CLOSED = { AuctionEvent e ->
     } as State
 
-    boolean isOurUpdate(AuctionEvent event) {
+    boolean isResponseUpdateForOurOwnBid(AuctionEvent event) {
         event instanceof Bid && event.client == clientId
     }
 
@@ -58,7 +61,7 @@ class Auction {
         currentState = state
     }
 
-    def update(Message message) {
+    def update(AuctionMessage message) {
         currentState.handle(Events.createFrom(message))
     }
 
