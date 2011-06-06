@@ -13,8 +13,8 @@ import pgoos.sniper.events.Close
 class Closing implements Behaviour {
   @Override
   Processing handle(Auction auction, AuctionEvent close, AuctionStateListener listener) {
-    def handle = close instanceof Close
-    if (handle) {
+    def shouldHandle = close instanceof Close
+    if (shouldHandle) {
       if (close.isResponseToOurBid(auction)) {
         listener.auctionLost close
       } else {
@@ -23,6 +23,5 @@ class Closing implements Behaviour {
       auction.close()
     }
     Processing.CONTINUE
-
   }
 }

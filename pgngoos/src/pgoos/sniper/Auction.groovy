@@ -20,9 +20,9 @@ class Auction {
   AuctionStateListener listener = AuctionStateListener.NONE
   Sniper sniper
 
-  Behaviour head = new pgoos.sniper.auctionbehaviours.NewAuction()
   LastBidPriceUpdator lastPrice = new LastBidPriceUpdator()
-  ChainedBehaviour all = new ChainedBehaviour().then(head).then(lastPrice).then(new Closing()).then(new Bidding())
+  ChainedBehaviour all = new ChainedBehaviour().then(new pgoos.sniper.auctionbehaviours.NewAuction())
+      .then(lastPrice).then(new Closing()).then(new Bidding())
 
   public String toString() {
     auctionId

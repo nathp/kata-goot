@@ -23,7 +23,7 @@ class AutoBidding implements Behaviour {
       if (autobid.exceededStopPrice(bid as Bid)) {
         listener.exceededStopPrice bid.asStopPriceBreached()
       } else {
-        autobid?.bidHigher bid.price as int, sniper
+        autobid.bidHigher bid.price as int, sniper
       }
 
     }

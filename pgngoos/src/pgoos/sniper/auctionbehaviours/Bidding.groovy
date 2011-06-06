@@ -14,8 +14,8 @@ class Bidding implements Behaviour {
 
   @Override
   Processing handle(Auction auction, AuctionEvent bid, AuctionStateListener listener) {
-    def handle = bid instanceof Bid
-    if (handle) {
+    def shouldHandle = bid instanceof Bid
+    if (shouldHandle) {
       if (auction.firstBidUpdate()) {
         listener.bidUpdate bid
       } else if (auction.isLoosing(bid)) {
@@ -25,7 +25,6 @@ class Bidding implements Behaviour {
         listener.bidUpdate bid.winning()
       }
     }
-
-    handle ? Processing.CONTINUE : Processing.STOP
+    Processing.CONTINUE
   }
 }

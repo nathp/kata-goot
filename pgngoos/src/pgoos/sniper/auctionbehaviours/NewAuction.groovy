@@ -13,11 +13,11 @@ class NewAuction implements Behaviour {
 
   @Override
   Processing handle(Auction auction, AuctionEvent event, AuctionStateListener listener) {
-    def handle = event instanceof pgoos.sniper.events.NewAuction
-    if (handle) {
+    def shouldHandle = event instanceof pgoos.sniper.events.NewAuction
+    if (shouldHandle) {
       listener.connectedNewAuction event as pgoos.sniper.events.NewAuction
     }
-    handle ? Processing.STOP : Processing.CONTINUE
+    shouldHandle ? Processing.STOP : Processing.CONTINUE
   }
 
 }
