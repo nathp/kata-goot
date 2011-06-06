@@ -7,7 +7,7 @@ import pgoos.sniper.AuctionMessage
  * Date: 5/28/11, Time: 5:52 PM
  * Do not use without permission.
  */
-class Events {
+class EventFactory {
     static AuctionEvent createFrom(AuctionMessage message) {
         switch (message.type) {
             case "Welcome": return NewAuction.create(message);

@@ -30,7 +30,7 @@ class AuctionMessage {
     }
 
     String column(int c) {
-        int correctedCol = c - 4
+        int correctedCol = c - 4    // B1, 1.1, auctionId, Command-name are removed
         def items = props.split(":").collect { it.trim() }
         correctedCol < items.size() ? items[correctedCol] : null
     }

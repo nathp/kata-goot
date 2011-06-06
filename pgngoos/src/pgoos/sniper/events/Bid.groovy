@@ -16,8 +16,10 @@ class Bid extends AuctionEvent {
     final State state
 
     static Bid create(AuctionMessage message) {
-        new Bid(message.id, message.column(4), message.column(5), State.NotKnown)
+        new Bid(message.id, message.column(COLUMNS.price), message.column(COLUMNS.client), State.NotKnown)
     }
+
+    static Map COLUMNS = ["price": 4, "client": 5]
 
     Bid(String auctionId, String price, String client, State state) {
         this.auctionId = auctionId
@@ -33,43 +35,39 @@ class Bid extends AuctionEvent {
     void handle(AuctionStateListener stateListener, Auction auction) {
         if (auction.firstBidUpdate()) {
             stateListener.bidUpdate this
+        } else if (auction.exceededStopPrice(this)) {
+            stateListener.exceededStopPrice this.asStopPriceBreached()
         } else if (auction.isLoosing(this)) {
             stateListener.loosing this.loosing()
-        } else {
+        }
+        else {
             stateListener.bidUpdate this.winning()
         }
     }
 
-    Bid winning() {
-        new Bid(auctionId, price, client, State.Winning)
+    Bid asStopPriceBreached() {
+        new Bid(auctionId, price, client, State.StopPriceBreached)
     }
 
-    Bid loosing() {
-        new Bid(auctionId, price, client, State.Losing)
-    }
+    Bid winning() { new Bid(auctionId, price, client, State.Winning) }
 
-    boolean isMoreThan(int price) {
-        (this.price as int) > price
-    }
+    Bid loosing() { new Bid(auctionId, price, client, State.Losing) }
 
-    boolean isOurs(String ourClientId) {
-        client == ourClientId
-    }
+    boolean isMoreThan(int price) { (this.price as int) > price }
+
+    boolean belongsToClient(String ourClientId) { client == ourClientId }
 
     public String toString() {
         return "Bid{" +
                 "price='" + price + '\'' +
+                ", auction ='" + auctionId + '\'' +
                 ", client='" + client + '\'' +
                 ", state=" + state +
                 '}';
     }
 
     static enum State {
-        Winning,
-        Losing,
-        Lost,
-        Won,
-        NotKnown
+        Winning, Losing, Lost, Won, NotKnown, StopPriceBreached
     }
 
 

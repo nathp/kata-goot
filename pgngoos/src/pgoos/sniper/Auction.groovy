@@ -7,65 +7,137 @@ import pgoos.sniper.events.*
  * Date: 5/27/11, Time: 9:18 PM
  * Do not use without permission.
  *
- * Represents the stateful representation of an Auction for some item.
+ * Stateful representation of an Auction of some item.
  *
  */
 class Auction {
 
-    String auctionId
-    String clientId
 
-    AuctionStateListener listener
+    private interface State {
+        void handle(AuctionEvent msg)
 
-    String ourLastBidPrice  = null
-
-    public String toString() {
-        auctionId
+        boolean isLoosing(Bid bid)
     }
 
-    boolean isLoosing(Bid bid) {
-        !bid.isOurs(auctionId) && !firstBidUpdate() && bid.isMoreThan(ourLastBidPrice as int)
+    class InitialState implements State {
+        @Override
+        void handle(AuctionEvent msg) {
+            msg.handle(listener, Auction.this)
+            switchTo(HANDLE_BID)
+        }
+
+        @Override
+        boolean isLoosing(Bid bid) {
+            return false
+        }
+
+    }
+    State INITIAL = new InitialState()
+
+    class BidState implements State {
+        @Override
+        void handle(AuctionEvent msg) {
+            msg.handle(listener, Auction.this)
+            postHandle(msg)
+        }
+
+        private def postHandle(AuctionEvent msg) {
+            if (isResponseUpdateForOurOwnBid(msg)) {
+                ourLastBidPrice = msg.price
+            }
+        }
+
+        boolean isResponseUpdateForOurOwnBid(AuctionEvent event) {
+            event instanceof Bid && event.client == clientId
+        }
+
+        boolean isLoosing(Bid bid) {
+            isNotOurBid(bid) && !firstBidUpdate() && bid.isMoreThan(ourLastBidPrice as int)
+        }
+
+        private boolean isNotOurBid(Bid bid) {
+            return !bid.belongsToClient(auctionId)
+        }
+
     }
 
     boolean firstBidUpdate() {
         ourLastBidPrice == null
     }
 
-    private interface State {
-        void handle(AuctionEvent msg)
+    String ourLastBidPrice
+
+    AutoBid autobid
+
+    State HANDLE_BID = new BidState()
+
+    class Closed implements State {
+        @Override
+        void handle(AuctionEvent msg) { }
+
+        @Override
+        boolean isLoosing(Bid bid) {return false }
     }
 
-    State WAIT_FOR_WELCOME = {AuctionEvent msg ->
-        msg.handle(listener, delegate)
-        switchTo(HANDLE_BID)
+    State CLOSED = new Closed()
 
-    } as State
+    class AutoBidState implements State {
+        Sniper sniper
 
-    State HANDLE_BID = { AuctionEvent msg ->
-        msg.handle(listener, delegate)
-        if (isResponseUpdateForOurOwnBid(msg)) {
-            ourLastBidPrice = msg.price
+
+        AutoBidState(Sniper sniper) {
+            this.sniper = sniper
         }
-    } as State
 
-    State CLOSED = { AuctionEvent e ->
-    } as State
+        @Override
+        void handle(AuctionEvent msg) {
+            HANDLE_BID.handle msg
+            if (msg instanceof Bid) {
+                Bid bid = msg
+                autobid.bidHigher bid.price as int, sniper
+            }
+        }
 
-    boolean isResponseUpdateForOurOwnBid(AuctionEvent event) {
-        event instanceof Bid && event.client == clientId
+        @Override
+        boolean isLoosing(Bid bid) {
+            HANDLE_BID.isLoosing bid
+        }
+
     }
 
-    State currentState = WAIT_FOR_WELCOME
+    String auctionId
+    String clientId
+    AuctionStateListener listener = AuctionStateListener.NONE
+    State currentState = INITIAL
+
+
+    public String toString() {
+        auctionId
+    }
+
+    boolean isLoosing(Bid bid) {
+        currentState.isLoosing bid
+    }
 
     private def switchTo(State state) {
         currentState = state
     }
 
+    def autoBid(AutoBid autoBid, Sniper sniper) {
+        this.autobid = autoBid
+        switchTo new AutoBidState(sniper)
+    }
+
     def update(AuctionMessage message) {
-        currentState.handle(Events.createFrom(message))
+        currentState.handle(EventFactory.createFrom(message))
     }
 
     void close() {
         switchTo CLOSED
     }
+
+    boolean exceededStopPrice(Bid bid) {
+        autobid?.exceededStopPrice(bid)
+    }
+
 }

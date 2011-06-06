@@ -6,17 +6,17 @@ import pgoos.sniper.events.Bid
 import pgoos.sniper.events.NewAuction
 import pgoos.sniper.events.Close
 
-public class SniperDomainTest extends TestCase {
+public class SniperBasicTest extends TestCase {
 
     AuctionStateListener ui
     Sniper sniper
 
-    FakeServer fakeServer
+    FakeAuctionHouse fakeServer
 
     void setUp() {
         ui = mock(AuctionStateListener.class)
         sniper = new Sniper(clientId: "thisclient", auctions: new Auctions(listener: ui, clientId: "thisclient"))
-        fakeServer = new FakeServer(sniper)
+        fakeServer = new FakeAuctionHouse(sniper)
         sniper.start()
     }
 
@@ -32,8 +32,8 @@ public class SniperDomainTest extends TestCase {
         verify(ui).bidUpdate(Bid.newBid("someitem", "123", "someclient"))
     }
 
-    private FakeServer startFakeServer() {
-        new FakeServer(sniper)
+    private FakeAuctionHouse startFakeServer() {
+        new FakeAuctionHouse(sniper)
     }
 
     void test_should_join_an_auction_and_loose_when_auction_closes() {
@@ -70,6 +70,8 @@ public class SniperDomainTest extends TestCase {
         fakeServer.mimicBid("someitem", "11", "someclient")
         verify(ui).loosing(Bid.newBid("someitem", "11", "someclient").loosing())
     }
+
+
 
     private def bidFor(String someitem, String price) {
         sniper.bid(someitem, price)

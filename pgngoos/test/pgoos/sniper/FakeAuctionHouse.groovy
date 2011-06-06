@@ -4,12 +4,15 @@ package pgoos.sniper
  * Copy right of Prasanth Nath.
  * Date: 5/26/11, Time: 7:37 PM
  * Do not use without permission.
+ *
+ * Represents Auction House for testing.
+ * Auction Server is not available for testing. It is a third party system that we don't control.
  */
-class FakeServer {
+class FakeAuctionHouse {
 
     AuctionMessageHandler auction
 
-    FakeServer(AuctionMessageHandler auction) {
+    FakeAuctionHouse(AuctionMessageHandler auction) {
         this.auction = auction
     }
 

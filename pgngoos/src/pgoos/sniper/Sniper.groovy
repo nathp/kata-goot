@@ -15,7 +15,8 @@ class Sniper implements AuctionMessageHandler {
         // connect via auctionConnection
     }
 
-    @Override void handleMessage(String message) {
+    @Override
+    void handleMessage(String message) {
         def msg = AuctionMessage.parseFrom(message)
         Auction a = auctions.findAuctionWithId(msg.id)
         a.update(msg)
@@ -23,5 +24,10 @@ class Sniper implements AuctionMessageHandler {
 
     def bid(String auctionId, String price) {
         auctionConnection.sendMessage AuctionMessage.rawBidMessage(auctionId, price, clientId)
+    }
+
+    def autoBid(AutoBid autoBid) {
+        Auction auction = auctions.findAuctionWithId (autoBid.item)
+        auction.autoBid(autoBid, this)
     }
 }
