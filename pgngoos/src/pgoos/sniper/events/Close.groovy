@@ -15,22 +15,12 @@ class Close extends AuctionEvent {
     String client
 
     static Close create(AuctionMessage message) {
-        new Close(auctionId: message.id, price:message.column(COLUMNS.price), client: message.column(COLUMNS.clientId))
+        new Close(auctionId: message.id, price: message.column(COLUMNS.price), client: message.column(COLUMNS.clientId))
     }
 
-    static Map COLUMNS = ["price" : 4, "clientId" :  5]
+    static Map COLUMNS = ["price": 4, "clientId": 5]
 
-    @Override
-    void handle(AuctionStateListener stateListener, Auction auction) {
-//        if (isResponseToOurBid(auction)) {
-//            stateListener.auctionLost this
-//        } else {
-//            stateListener.won this
-//        }
-//        auction.close()
-    }
-
-     boolean isResponseToOurBid(Auction auction) {
+    boolean isResponseToOurBid(Auction auction) {
         return auction.clientId != client
     }
 

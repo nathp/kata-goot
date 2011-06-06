@@ -32,19 +32,6 @@ class Bid extends AuctionEvent {
         new Bid(id, price, client, State.NotKnown)
     }
 
-    void handle(AuctionStateListener stateListener, Auction auction) {
-//        if (auction.firstBidUpdate()) {
-//            stateListener.bidUpdate this
-//        } else if (auction.exceededStopPrice(this)) {
-//            stateListener.exceededStopPrice this.asStopPriceBreached()
-//        } else if (auction.isLoosing(this)) {
-//            stateListener.loosing this.loosing()
-//        }
-//        else {
-//            stateListener.bidUpdate this.winning()
-//        }
-    }
-
     Bid asStopPriceBreached() {
         new Bid(auctionId, price, client, State.StopPriceBreached)
     }

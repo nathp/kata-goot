@@ -12,7 +12,4 @@ import pgoos.sniper.Auction
  */
 public abstract class AuctionEvent {
     String auctionId
-    abstract void handle(AuctionStateListener stateListener, Auction auction)
-
-
 }

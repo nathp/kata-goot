@@ -1,9 +1,12 @@
 package pgoos.sniper
 
 import pgoos.sniper.events.*
-import pgoos.sniper.events.auctionstates.Closing
-import pgoos.sniper.events.auctionstates.BidState
-import pgoos.sniper.events.auctionstates.AutoBidState
+import pgoos.sniper.auctionbehaviours.Closing
+import pgoos.sniper.auctionbehaviours.Bidding
+import pgoos.sniper.auctionbehaviours.AutoBidding
+import pgoos.sniper.auctionbehaviours.Behaviour
+import pgoos.sniper.auctionbehaviours.LastBidPriceUpdator
+import pgoos.sniper.auctionbehaviours.ChainedBehaviour
 
 /**
  * Copy right of Prasanth Nath.
@@ -15,53 +18,31 @@ import pgoos.sniper.events.auctionstates.AutoBidState
  */
 class Auction {
 
-    boolean firstBidUpdate() {
-        ourLastBidPrice == null
-    }
-
-    String ourLastBidPrice
-
-    AutoBid autobid
-
     String auctionId
+
     String clientId
     AuctionStateListener listener = AuctionStateListener.NONE
     Sniper sniper
+
+    Behaviour head = new pgoos.sniper.auctionbehaviours.NewAuction()
+    LastBidPriceUpdator lastPrice = new LastBidPriceUpdator()
+    ChainedBehaviour all = new ChainedBehaviour().then(head).then(lastPrice).then(new Closing()).then(new Bidding())
 
     public String toString() {
         auctionId
     }
 
     def autoBid(AutoBid autoBid, Sniper sniper) {
-        this.autobid = autoBid
-        this.sniper = sniper
+        all.then(new AutoBidding(sniper: sniper, autobid: autoBid))
     }
 
     def update(AuctionMessage message) {
         def event = EventFactory.createFrom(message)
-        if (event instanceof Bid) {
-            new BidState().handle(this, event as Bid, listener)
-            new AutoBidState(sniper: sniper, autobid: autobid).handle(this, event as Bid, listener)
-        }  else if (event instanceof Close) {
-            new Closing().handle(this, event as Close, listener)
-        } else if (event instanceof NewAuction) {
-            listener.connectedNewAuction event as NewAuction
-        }
-        postHandle(event)
-    }
-
-    private def postHandle(AuctionEvent msg) {
-        if (isResponseUpdateForOurOwnBid(msg)) {
-            ourLastBidPrice = msg.price
-        }
-    }
-
-    boolean isResponseUpdateForOurOwnBid(AuctionEvent event) {
-        event instanceof Bid && event.client == clientId
+        all.handle this, listener, event
     }
 
     boolean isLoosing(Bid bid) {
-        isNotOurBid(bid) && !firstBidUpdate() && bid.isMoreThan(ourLastBidPrice as int)
+        isNotOurBid(bid) && !firstBidUpdate() && bid.isMoreThan(lastPrice.price())
     }
 
     private boolean isNotOurBid(Bid bid) {
@@ -71,8 +52,7 @@ class Auction {
     void close() {
     }
 
-    boolean exceededStopPrice(Bid bid) {
-        autobid?.exceededStopPrice(bid)
+    boolean firstBidUpdate() {
+        lastPrice.firstBidUpdate()
     }
-
 }
