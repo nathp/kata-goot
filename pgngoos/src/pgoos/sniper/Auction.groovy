@@ -1,6 +1,9 @@
 package pgoos.sniper
 
 import pgoos.sniper.events.*
+import pgoos.sniper.events.auctionstates.Closing
+import pgoos.sniper.events.auctionstates.BidState
+import pgoos.sniper.events.auctionstates.AutoBidState
 
 /**
  * Copy right of Prasanth Nath.
@@ -36,10 +39,13 @@ class Auction {
 
     def update(AuctionMessage message) {
         def event = EventFactory.createFrom(message)
-        event.handle(listener, this)
         if (event instanceof Bid) {
-            Bid bid = event
-            autobid?.bidHigher bid.price as int, sniper
+            new BidState().handle(this, event as Bid, listener)
+            new AutoBidState(sniper: sniper, autobid: autobid).handle(this, event as Bid, listener)
+        }  else if (event instanceof Close) {
+            new Closing().handle(this, event as Close, listener)
+        } else if (event instanceof NewAuction) {
+            listener.connectedNewAuction event as NewAuction
         }
         postHandle(event)
     }

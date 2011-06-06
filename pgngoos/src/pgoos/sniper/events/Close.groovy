@@ -22,15 +22,15 @@ class Close extends AuctionEvent {
 
     @Override
     void handle(AuctionStateListener stateListener, Auction auction) {
-        if (isResponseToOurBid(auction)) {
-            stateListener.auctionLost this
-        } else {
-            stateListener.won this
-        }
-        auction.close()
+//        if (isResponseToOurBid(auction)) {
+//            stateListener.auctionLost this
+//        } else {
+//            stateListener.won this
+//        }
+//        auction.close()
     }
 
-    private boolean isResponseToOurBid(Auction auction) {
+     boolean isResponseToOurBid(Auction auction) {
         return auction.clientId != client
     }
 

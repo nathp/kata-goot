@@ -18,7 +18,7 @@ class NewAuction extends AuctionEvent {
 
     @Override
     void handle(AuctionStateListener stateListener, Auction auction) {
-        stateListener.connectedNewAuction this
+//        stateListener.connectedNewAuction this
     }
 
     boolean equals(o) {
