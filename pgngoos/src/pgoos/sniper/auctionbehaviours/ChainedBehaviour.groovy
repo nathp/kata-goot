@@ -3,7 +3,6 @@ package pgoos.sniper.auctionbehaviours
 import pgoos.sniper.Auction
 import pgoos.sniper.AuctionStateListener
 import pgoos.sniper.events.AuctionEvent
-import pgoos.sniper.auctionbehaviours.Chain.Processing
 
 /**
  * Copy right of Prasanth Nath.
@@ -14,18 +13,19 @@ class ChainedBehaviour implements Behaviour {
 
   def delegates = []
 
+  def then(Behaviour next) {
+    delegates << next
+    this
+  }
+
   @Override
-  void handle(Auction auction, AuctionStateListener listener, AuctionEvent event) {
+  Processing handle(Auction auction, AuctionEvent event, AuctionStateListener listener) {
     for (b in delegates) {
-      def action = b.doHandle(auction, event, listener)
+      def action = b.handle(auction, event, listener)
       if (action == Processing.STOP) {
         break
       }
     }
-  }
-
-  def then(Behaviour next) {
-    delegates << next
-    this
+    return Processing.STOP
   }
 }

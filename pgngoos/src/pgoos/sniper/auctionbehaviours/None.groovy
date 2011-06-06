@@ -11,8 +11,8 @@ import pgoos.sniper.events.AuctionEvent
  */
 class None implements  Behaviour {
 
-    @Override
-    void handle(Auction auction, AuctionStateListener listener, AuctionEvent event) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+  @Override
+  Processing handle(Auction auction, AuctionEvent event, AuctionStateListener auctionStateListener) {
+    return null  //To change body of implemented methods use File | Settings | File Templates.
+  }
 }

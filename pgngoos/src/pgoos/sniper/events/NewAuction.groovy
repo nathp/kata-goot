@@ -1,8 +1,6 @@
 package pgoos.sniper.events
 
 import pgoos.sniper.AuctionMessage
-import pgoos.sniper.AuctionStateListener
-import pgoos.sniper.Auction
 
 /**
  * Copy right of Prasanth Nath.

@@ -1,8 +1,8 @@
 package pgoos.sniper
 
 import pgoos.sniper.events.Bid
-import pgoos.sniper.events.NewAuction
 import pgoos.sniper.events.Close
+import pgoos.sniper.events.NewAuction
 
 /**
  * Copy right of Prasanth Nath.

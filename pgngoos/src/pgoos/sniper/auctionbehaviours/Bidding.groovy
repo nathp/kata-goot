@@ -1,9 +1,7 @@
 package pgoos.sniper.auctionbehaviours
 
 import pgoos.sniper.Auction
-
 import pgoos.sniper.AuctionStateListener
-
 import pgoos.sniper.events.AuctionEvent
 import pgoos.sniper.events.Bid
 
@@ -12,10 +10,10 @@ import pgoos.sniper.events.Bid
  * Date: 6/6/11, Time: 4:08 PM
  * Do not use without permission.
  */
-class Bidding extends Chain {
+class Bidding implements Behaviour {
 
     @Override
-    Processing doHandle(Auction auction, AuctionEvent bid, AuctionStateListener listener) {
+    Processing handle(Auction auction, AuctionEvent bid, AuctionStateListener listener) {
         def handle = bid instanceof Bid
         if (handle) {
             if (auction.firstBidUpdate()) {

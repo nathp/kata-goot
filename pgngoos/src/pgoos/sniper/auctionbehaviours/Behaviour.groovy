@@ -10,5 +10,5 @@ import pgoos.sniper.events.AuctionEvent
  * Do not use without permission.
  */
 public interface Behaviour {
-    void handle(Auction auction, AuctionStateListener listener, AuctionEvent event)
+    Processing handle(Auction auction, AuctionEvent event, AuctionStateListener auctionStateListener)
 }

@@ -1,12 +1,8 @@
 package pgoos.sniper
 
-import pgoos.sniper.events.*
-import pgoos.sniper.auctionbehaviours.Closing
-import pgoos.sniper.auctionbehaviours.Bidding
-import pgoos.sniper.auctionbehaviours.AutoBidding
-import pgoos.sniper.auctionbehaviours.Behaviour
-import pgoos.sniper.auctionbehaviours.LastBidPriceUpdator
-import pgoos.sniper.auctionbehaviours.ChainedBehaviour
+import pgoos.sniper.events.Bid
+import pgoos.sniper.events.EventFactory
+import pgoos.sniper.auctionbehaviours.*
 
 /**
  * Copy right of Prasanth Nath.
@@ -38,7 +34,7 @@ class Auction {
 
     def update(AuctionMessage message) {
         def event = EventFactory.createFrom(message)
-        all.handle this, listener, event
+        all.handle this, event, listener
     }
 
     boolean isLoosing(Bid bid) {

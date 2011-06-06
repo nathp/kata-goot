@@ -1,8 +1,8 @@
 package pgoos.sniper.auctionbehaviours
 
 import pgoos.sniper.Auction
-import pgoos.sniper.events.AuctionEvent
 import pgoos.sniper.AuctionStateListener
+import pgoos.sniper.events.AuctionEvent
 import pgoos.sniper.events.Bid
 
 /**
@@ -10,11 +10,11 @@ import pgoos.sniper.events.Bid
  * Date: 6/6/11, Time: 5:23 PM
  * Do not use without permission.
  */
-class LastBidPriceUpdator extends Chain {
+class LastBidPriceUpdator implements Behaviour {
     String ourLastBidPrice
 
     @Override
-    Processing doHandle(Auction auction, AuctionEvent msg, AuctionStateListener auctionStateListener) {
+    Processing handle(Auction auction, AuctionEvent msg, AuctionStateListener auctionStateListener) {
         if (isResponseUpdateForOurOwnBid(msg, auction)) {
             ourLastBidPrice = msg.price
         }
