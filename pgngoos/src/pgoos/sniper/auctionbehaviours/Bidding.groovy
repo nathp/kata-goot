@@ -12,20 +12,20 @@ import pgoos.sniper.events.Bid
  */
 class Bidding implements Behaviour {
 
-    @Override
-    Processing handle(Auction auction, AuctionEvent bid, AuctionStateListener listener) {
-        def handle = bid instanceof Bid
-        if (handle) {
-            if (auction.firstBidUpdate()) {
-                listener.bidUpdate bid
-            } else if (auction.isLoosing(bid)) {
-                listener.loosing bid.loosing()
-            }
-            else {
-                listener.bidUpdate bid.winning()
-            }
-        }
-
-        handle ? Processing.CONTINUE : Processing.STOP
+  @Override
+  Processing handle(Auction auction, AuctionEvent bid, AuctionStateListener listener) {
+    def handle = bid instanceof Bid
+    if (handle) {
+      if (auction.firstBidUpdate()) {
+        listener.bidUpdate bid
+      } else if (auction.isLoosing(bid)) {
+        listener.loosing bid.loosing()
+      }
+      else {
+        listener.bidUpdate bid.winning()
+      }
     }
+
+    handle ? Processing.CONTINUE : Processing.STOP
+  }
 }

@@ -14,18 +14,18 @@ import pgoos.sniper.events.NewAuction
  *
  */
 interface AuctionStateListener {
-    AuctionStateListener NONE = {} as AuctionStateListener
+  AuctionStateListener NONE = {} as AuctionStateListener
 
-    void connectedNewAuction(NewAuction event)
+  void connectedNewAuction(NewAuction event)
 
-    void bidUpdate(Bid bid)
+  void bidUpdate(Bid bid)
 
-    void auctionLost(Close close)
+  void auctionLost(Close close)
 
-    void won(Close close)
+  void won(Close close)
 
-    void loosing(Bid bid)
+  void loosing(Bid bid)
 
-    void exceededStopPrice(Bid bid)
+  void exceededStopPrice(Bid bid)
 
 }

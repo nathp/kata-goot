@@ -9,23 +9,23 @@ import pgoos.sniper.AuctionMessage
  */
 class NewAuction extends AuctionEvent {
 
-    static NewAuction create(AuctionMessage message) {
-        new NewAuction(auctionId: message.id)
+  static NewAuction create(AuctionMessage message) {
+    new NewAuction(auctionId: message.id)
 
-    }
+  }
 
-    boolean equals(o) {
-        if (this.is(o)) return true;
-        if (getClass() != o.class) return false;
+  boolean equals(o) {
+    if (this.is(o)) return true;
+    if (getClass() != o.class) return false;
 
-        NewAuction that = (NewAuction) o;
+    NewAuction that = (NewAuction) o;
 
-        if (auctionId != that.auctionId) return false;
+    if (auctionId != that.auctionId) return false;
 
-        return true;
-    }
+    return true;
+  }
 
-    int hashCode() {
-        return (auctionId != null ? auctionId.hashCode() : 0);
-    }
+  int hashCode() {
+    return (auctionId != null ? auctionId.hashCode() : 0);
+  }
 }

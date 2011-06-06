@@ -8,5 +8,5 @@ package pgoos.sniper.events
  * Rich domain objects that explain what is happening in the Auction process.
  */
 public abstract class AuctionEvent {
-    String auctionId
+  String auctionId
 }

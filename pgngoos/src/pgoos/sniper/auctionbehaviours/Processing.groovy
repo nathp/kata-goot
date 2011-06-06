@@ -6,5 +6,5 @@ package pgoos.sniper.auctionbehaviours
  * Do not use without permission.
  */
 enum Processing {
-    STOP, CONTINUE
+  STOP, CONTINUE
 }

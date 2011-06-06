@@ -8,38 +8,38 @@ import pgoos.sniper.events.Bid
  * Do not use without permission.
  */
 class AutoBid {
-    String item
-    int increment
-    int stopPrice
+  String item
+  int increment
+  int stopPrice
 
-    static AutoBid forItem(String item) {
-        new AutoBid(item: item)
+  static AutoBid forItem(String item) {
+    new AutoBid(item: item)
+  }
+
+  AutoBid increment(int increment) {
+    this.increment = increment
+    this
+  }
+
+  AutoBid stopAt(int stopPrice) {
+    this.stopPrice = stopPrice
+    this
+  }
+
+  void bidHigher(int price, Sniper sniper) {
+    def nextBid = nextPrice(price)
+    if (nextBid < stopPrice) {
+      sniper.bid item, nextBid + ""
     }
+  }
 
-    AutoBid increment(int increment) {
-        this.increment = increment
-        this
-    }
-
-    AutoBid stopAt(int stopPrice) {
-        this.stopPrice = stopPrice
-        this
-    }
-
-    void bidHigher(int price, Sniper sniper) {
-        def nextBid = nextPrice(price)
-        if (nextBid < stopPrice) {
-            sniper.bid item, nextBid + ""
-        }
-    }
-
-    private int nextPrice(int price) {
-        return price + increment
-    }
+  private int nextPrice(int price) {
+    return price + increment
+  }
 
 
-    boolean exceededStopPrice(Bid bid) {
-        def nextBid = nextPrice(bid.price as int)
-        nextBid >= stopPrice
-    }
+  boolean exceededStopPrice(Bid bid) {
+    def nextBid = nextPrice(bid.price as int)
+    nextBid >= stopPrice
+  }
 }

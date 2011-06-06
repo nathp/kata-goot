@@ -11,25 +11,25 @@ import pgoos.sniper.events.Bid
  * Do not use without permission.
  */
 class LastBidPriceUpdator implements Behaviour {
-    String ourLastBidPrice
+  String ourLastBidPrice
 
-    @Override
-    Processing handle(Auction auction, AuctionEvent msg, AuctionStateListener auctionStateListener) {
-        if (isResponseUpdateForOurOwnBid(msg, auction)) {
-            ourLastBidPrice = msg.price
-        }
-        Processing.CONTINUE
+  @Override
+  Processing handle(Auction auction, AuctionEvent msg, AuctionStateListener auctionStateListener) {
+    if (isResponseUpdateForOurOwnBid(msg, auction)) {
+      ourLastBidPrice = msg.price
     }
+    Processing.CONTINUE
+  }
 
-    boolean isResponseUpdateForOurOwnBid(AuctionEvent event, Auction auction) {
-        event instanceof Bid && event.client == auction.clientId
-    }
+  boolean isResponseUpdateForOurOwnBid(AuctionEvent event, Auction auction) {
+    event instanceof Bid && event.client == auction.clientId
+  }
 
-    boolean firstBidUpdate() {
-        return ourLastBidPrice == null
-    }
+  boolean firstBidUpdate() {
+    return ourLastBidPrice == null
+  }
 
-    int price() {
-        ourLastBidPrice as int
-    }
+  int price() {
+    ourLastBidPrice as int
+  }
 }

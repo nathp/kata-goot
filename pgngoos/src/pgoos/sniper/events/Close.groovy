@@ -10,38 +10,38 @@ import pgoos.sniper.AuctionMessage
  */
 class Close extends AuctionEvent {
 
-    String price
-    String client
+  String price
+  String client
 
-    static Close create(AuctionMessage message) {
-        new Close(auctionId: message.id, price: message.column(COLUMNS.price), client: message.column(COLUMNS.clientId))
-    }
+  static Close create(AuctionMessage message) {
+    new Close(auctionId: message.id, price: message.column(COLUMNS.price), client: message.column(COLUMNS.clientId))
+  }
 
-    static Map COLUMNS = ["price": 4, "clientId": 5]
+  static Map COLUMNS = ["price": 4, "clientId": 5]
 
-    boolean isResponseToOurBid(Auction auction) {
-        return auction.clientId != client
-    }
+  boolean isResponseToOurBid(Auction auction) {
+    return auction.clientId != client
+  }
 
 
-    boolean equals(o) {
-        if (this.is(o)) return true;
-        if (getClass() != o.class) return false;
+  boolean equals(o) {
+    if (this.is(o)) return true;
+    if (getClass() != o.class) return false;
 
-        Close close = (Close) o;
+    Close close = (Close) o;
 
-        if (client != close.client) return false;
-        if (auctionId != close.auctionId) return false;
-        if (price != close.price) return false;
+    if (client != close.client) return false;
+    if (auctionId != close.auctionId) return false;
+    if (price != close.price) return false;
 
-        return true;
-    }
+    return true;
+  }
 
-    int hashCode() {
-        int result;
-        result = (price != null ? price.hashCode() : 0);
-        result = 31 * result + (client != null ? client.hashCode() : 0);
-        result = 31 * result + (auctionId != null ? auctionId.hashCode() : 0);
-        return result;
-    }
+  int hashCode() {
+    int result;
+    result = (price != null ? price.hashCode() : 0);
+    result = 31 * result + (client != null ? client.hashCode() : 0);
+    result = 31 * result + (auctionId != null ? auctionId.hashCode() : 0);
+    return result;
+  }
 }

@@ -7,32 +7,32 @@ package pgoos.sniper
  */
 class MessageParser {
 
-    AuctionMessage parse(String message) {
-        def tokens = tokens(message)
-        def serverid = serverid(tokens)
-        def type = type(tokens)
-        def properties = message - prefix() - ":" - serverid - ":" - type
-        AuctionMessage.createFrom(serverid, type, properties)
+  AuctionMessage parse(String message) {
+    def tokens = tokens(message)
+    def serverid = serverid(tokens)
+    def type = type(tokens)
+    def properties = message - prefix() - ":" - serverid - ":" - type
+    AuctionMessage.createFrom(serverid, type, properties)
 
-    }
+  }
 
-    String prefix() {
-        "B1:1.1"
-    }
+  String prefix() {
+    "B1:1.1"
+  }
 
-    private String[] tokens(String message) {
-        return message.split(":")
-    }
+  private String[] tokens(String message) {
+    return message.split(":")
+  }
 
-    def type(String[] tokens) {
-        tokens[3]
-    }
+  def type(String[] tokens) {
+    tokens[3]
+  }
 
-    def serverid(String[] tokens) {
-        tokens[2]
-    }
+  def serverid(String[] tokens) {
+    tokens[2]
+  }
 
-    String parseId(String message) {
-        serverid(tokens(message))
-    }
+  String parseId(String message) {
+    serverid(tokens(message))
+  }
 }

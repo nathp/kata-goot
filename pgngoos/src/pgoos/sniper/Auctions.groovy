@@ -6,16 +6,16 @@ package pgoos.sniper
  * Do not use without permission.
  */
 class Auctions {
-    Map map = new HashMap()
-    AuctionStateListener listener = AuctionStateListener.NONE
-    String clientId
+  Map map = new HashMap()
+  AuctionStateListener listener = AuctionStateListener.NONE
+  String clientId
 
-    Auction findAuctionWithId(String id) {
-        Auction a = map.get(id) as Auction
-        if (!a) {
-            a = new Auction(auctionId: id, listener: listener, clientId: clientId)
-            map.put(id, a)
-        }
-        a
+  Auction findAuctionWithId(String id) {
+    Auction a = map.get(id) as Auction
+    if (!a) {
+      a = new Auction(auctionId: id, listener: listener, clientId: clientId)
+      map.put(id, a)
     }
+    a
+  }
 }

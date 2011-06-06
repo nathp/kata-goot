@@ -14,41 +14,41 @@ import pgoos.sniper.auctionbehaviours.*
  */
 class Auction {
 
-    String auctionId
+  String auctionId
 
-    String clientId
-    AuctionStateListener listener = AuctionStateListener.NONE
-    Sniper sniper
+  String clientId
+  AuctionStateListener listener = AuctionStateListener.NONE
+  Sniper sniper
 
-    Behaviour head = new pgoos.sniper.auctionbehaviours.NewAuction()
-    LastBidPriceUpdator lastPrice = new LastBidPriceUpdator()
-    ChainedBehaviour all = new ChainedBehaviour().then(head).then(lastPrice).then(new Closing()).then(new Bidding())
+  Behaviour head = new pgoos.sniper.auctionbehaviours.NewAuction()
+  LastBidPriceUpdator lastPrice = new LastBidPriceUpdator()
+  ChainedBehaviour all = new ChainedBehaviour().then(head).then(lastPrice).then(new Closing()).then(new Bidding())
 
-    public String toString() {
-        auctionId
-    }
+  public String toString() {
+    auctionId
+  }
 
-    def autoBid(AutoBid autoBid, Sniper sniper) {
-        all.then(new AutoBidding(sniper: sniper, autobid: autoBid))
-    }
+  def autoBid(AutoBid autoBid, Sniper sniper) {
+    all.then(new AutoBidding(sniper: sniper, autobid: autoBid))
+  }
 
-    def update(AuctionMessage message) {
-        def event = EventFactory.createFrom(message)
-        all.handle this, event, listener
-    }
+  def update(AuctionMessage message) {
+    def event = EventFactory.createFrom(message)
+    all.handle this, event, listener
+  }
 
-    boolean isLoosing(Bid bid) {
-        isNotOurBid(bid) && !firstBidUpdate() && bid.isMoreThan(lastPrice.price())
-    }
+  boolean isLoosing(Bid bid) {
+    isNotOurBid(bid) && !firstBidUpdate() && bid.isMoreThan(lastPrice.price())
+  }
 
-    private boolean isNotOurBid(Bid bid) {
-        return !bid.belongsToClient(auctionId)
-    }
+  private boolean isNotOurBid(Bid bid) {
+    return !bid.belongsToClient(auctionId)
+  }
 
-    void close() {
-    }
+  void close() {
+  }
 
-    boolean firstBidUpdate() {
-        lastPrice.firstBidUpdate()
-    }
+  boolean firstBidUpdate() {
+    lastPrice.firstBidUpdate()
+  }
 }
