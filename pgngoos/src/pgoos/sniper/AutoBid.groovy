@@ -26,10 +26,10 @@ class AutoBid {
     this
   }
 
-  void bidHigher(int price, Sniper sniper) {
-    def nextBid = nextPrice(price)
+  void bidHigher(int currentPrice, Sniper sniper) {
+    def nextBid = nextPrice(currentPrice)
     if (nextBid < stopPrice) {
-      sniper.bid item, nextBid + ""
+      sniper.bid item, nextBid as String
     }
   }
 

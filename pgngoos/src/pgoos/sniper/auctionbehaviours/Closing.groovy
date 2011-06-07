@@ -10,9 +10,9 @@ import pgoos.sniper.events.Close
  * Date: 6/6/11, Time: 4:06 PM
  * Do not use without permission.
  */
-class Closing implements Behaviour {
+class Closing implements Action {
   @Override
-  Processing handle(Auction auction, AuctionEvent close, AuctionStateListener listener) {
+  Processing do(Auction auction, AuctionEvent close, AuctionStateListener listener) {
     def shouldHandle = close instanceof Close
     if (shouldHandle) {
       if (close.isResponseToOurBid(auction)) {

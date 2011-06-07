@@ -9,19 +9,19 @@ import pgoos.sniper.events.AuctionEvent
  * Date: 6/6/11, Time: 5:47 PM
  * Do not use without permission.
  */
-class ChainedBehaviour implements Behaviour {
+class ActionChain implements Action {
 
   def delegates = []
 
-  def then(Behaviour next) {
+  def then(Action next) {
     delegates << next
     this
   }
 
   @Override
-  Processing handle(Auction auction, AuctionEvent event, AuctionStateListener listener) {
+  Processing do(Auction auction, AuctionEvent event, AuctionStateListener listener) {
     for (b in delegates) {
-      def action = b.handle(auction, event, listener)
+      def action = b.do(auction, event, listener)
       if (action == Processing.STOP) {
         break
       }

@@ -13,12 +13,12 @@ import pgoos.sniper.events.Bid
  * Date: 6/6/11, Time: 4:10 PM
  * Do not use without permission.
  */
-class AutoBidding implements Behaviour {
+class AutoBidding implements Action {
   AutoBid autobid
   Sniper sniper
 
   @Override
-  Processing handle(Auction auction, AuctionEvent bid, AuctionStateListener listener) {
+  Processing do(Auction auction, AuctionEvent bid, AuctionStateListener listener) {
     if (bid instanceof Bid) {
       if (autobid.exceededStopPrice(bid as Bid)) {
         listener.exceededStopPrice bid.asStopPriceBreached()

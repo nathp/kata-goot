@@ -9,6 +9,6 @@ import pgoos.sniper.events.AuctionEvent
  * Date: 6/6/11, Time: 4:24 PM
  * Do not use without permission.
  */
-public interface Behaviour {
-  Processing handle(Auction auction, AuctionEvent event, AuctionStateListener auctionStateListener)
+public interface Action {
+  Processing do(Auction auction, AuctionEvent event, AuctionStateListener auctionStateListener)
 }

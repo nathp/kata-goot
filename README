@@ -3,8 +3,18 @@ Code Kata based on Growing Object Oriented software by Tests - Nat pryce, Steve 
 Different approach to the problem
 Focus is not on UI
 
+A fictionary AuctionHouse conducts online Auctions. Clients may bid for items.
 AuctionHouse broadcasts auction events to clients
+Each auction is unique and is determined by the identity of the item it is selling
+
 Clients can subscribe to multiple auctions,
 set autobids - where bids happen automatically at a higher price until a stop-price
 
-etc
+Tasks
+ 1. Join the auction process, do nothing
+ 2. Join and listen to bids
+ 3. Join and bid some item and loose the bid
+ 4. Join, Bid and Win
+ 5. Join, AutoBid and loose
+ 6. Join, AutoBid and Win
+

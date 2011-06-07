@@ -21,7 +21,7 @@ class Auction {
   Sniper sniper
 
   LastBidPriceUpdator lastPrice = new LastBidPriceUpdator()
-  ChainedBehaviour all = new ChainedBehaviour().then(new pgoos.sniper.auctionbehaviours.NewAuction())
+  ActionChain all = new ActionChain().then(new pgoos.sniper.auctionbehaviours.NewAuction())
       .then(lastPrice).then(new Closing()).then(new Bidding())
 
   public String toString() {
@@ -34,7 +34,7 @@ class Auction {
 
   def update(AuctionMessage message) {
     def event = EventFactory.createFrom(message)
-    all.handle this, event, listener
+    all.do this, event, listener
   }
 
   boolean isLoosing(Bid bid) {
